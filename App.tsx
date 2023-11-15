@@ -1,7 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {LoginOrganism} from "./src/organisms/LoginOrganism";
+import app from '@react-native-firebase/app'
 
 export default function App() {
+    app.initializeApp("")
     return (
         <View style={styles.container}>
             <LoginOrganism/>
