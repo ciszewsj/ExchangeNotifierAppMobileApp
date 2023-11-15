@@ -1,12 +1,14 @@
 import {FC} from "react";
 import {Pressable, StyleSheet} from "react-native";
+import {GestureResponderEvent} from "react-native/Libraries/Types/CoreEventTypes";
 
-export const NormalButton: FC<{ children: FC; }> = ({children}) => {
+export const NormalButton: FC<{
+    children: FC;
+    onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
+}> = ({children, onPress}) => {
 
     return (
-        <Pressable style={styles.textInput} onPress={e => {
-            console.log("!@#?")
-        }}>
+        <Pressable style={styles.textInput} onPress={onPress}>
             {children}
         </Pressable>
     )

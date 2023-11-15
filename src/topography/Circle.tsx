@@ -1,7 +1,7 @@
 import {View} from "react-native";
 import {FC} from "react";
 
-export const Circle: FC<{ children: any }> = ({children}) => {
+export const Circle: FC<{ children?: any | undefined }> = ({children}) => {
     return (
         <View style={{
             flex: 1,

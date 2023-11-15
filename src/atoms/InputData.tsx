@@ -1,10 +1,27 @@
 import {StyleSheet, TextInput} from "react-native";
 import {FC} from "react";
+import {KeyboardTypeOptions} from "react-native/Libraries/Components/TextInput/TextInput";
 
-export const InputData: FC<{ value: any, onChange: any, placeholder: string }> = ({value, onChange, placeholder}) => {
+export const InputData: FC<{
+    value: any,
+    onChange: any,
+    placeholder: string,
+    keyboardType?: KeyboardTypeOptions | undefined,
+    secureText?: boolean | undefined
+}> = ({
+          value,
+          onChange,
+          placeholder,
+          keyboardType,
+          secureText
+      }) => {
     return (
         <TextInput style={styles.textInput}
-                   defaultValue={"TEXT"} value={value} placeholder={placeholder}
+                   defaultValue={"TEXT"}
+                   secureTextEntry={secureText}
+                   value={value}
+                   placeholder={placeholder}
+                   keyboardType={keyboardType}
                    onChangeText={e => {
                        onChange(e)
                    }}/>
