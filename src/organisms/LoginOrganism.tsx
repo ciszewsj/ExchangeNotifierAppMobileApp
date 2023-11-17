@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Text, View} from "react-native";
 import {InputData} from "../atoms/InputData";
 import {NormalButton} from "../atoms/NormalButton";
-import {useStore} from "../store/store";
+import {useStore} from "../store/authenticatonStore";
 import {TextButton} from "../atoms/TextButton";
 import {DataModal} from "../atoms/DataModal";
 import {ButtonText} from "../topography/ButtonText";
@@ -39,7 +39,7 @@ export const LoginOrganism: FC<{}> = ({}) => {
                 <TextButton text={"REGISTER"}
                             onPress={() => navigateToRegister()}/>
             </Text>
-            <DataModal title={"Login error"}>
+            <DataModal visible={false} title={"Login error"}>
                 <Text>Problem during log in</Text>
                 <NormalButton>
                     <ButtonText>Ok!</ButtonText>

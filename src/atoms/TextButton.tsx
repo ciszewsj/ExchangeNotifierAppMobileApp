@@ -7,7 +7,13 @@ export const TextButton: FC<{
     onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
 }> = ({text, onPress}) => {
     return (
-        <Text onPress={onPress} style={{textAlignVertical: "bottom"}}>
+        <Text onPress={onPress}
+              style={{
+                  textAlignVertical: "bottom",
+                  fontWeight: "bold",
+                  textDecorationLine: "underline",
+                  fontStyle: "italic"
+              }}>
             {text}
         </Text>
     )

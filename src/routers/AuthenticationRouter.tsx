@@ -4,7 +4,7 @@ import {FC} from "react";
 import {RegisterPage} from "../pages/RegisterPage";
 import {RestorePasswordPage} from "../pages/RestorePasswordPage";
 import {useNavigation} from "@react-navigation/native";
-import {useStore} from "../store/store";
+import {useStore} from "../store/authenticatonStore";
 
 const Stack = createStackNavigator();
 

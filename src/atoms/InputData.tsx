@@ -1,4 +1,4 @@
-import {StyleSheet, TextInput} from "react-native";
+import {StyleSheet, TextInput, View} from "react-native";
 import {FC} from "react";
 import {KeyboardTypeOptions} from "react-native/Libraries/Components/TextInput/TextInput";
 
@@ -16,15 +16,20 @@ export const InputData: FC<{
           secureText
       }) => {
     return (
-        <TextInput style={styles.textInput}
-                   defaultValue={"TEXT"}
-                   secureTextEntry={secureText}
-                   value={value}
-                   placeholder={placeholder}
-                   keyboardType={keyboardType}
-                   onChangeText={e => {
-                       onChange(e)
-                   }}/>
+        <View style={{...styles.textInput, }}>
+            <View style={{flex: 1}}>
+                <TextInput
+                    defaultValue={"TEXT"}
+                    secureTextEntry={secureText}
+                    value={value}
+                    placeholder={placeholder}
+                    keyboardType={keyboardType}
+                    onChangeText={e => {
+                        onChange(e)
+                    }}/>
+            </View>
+            {/*<View style={{width: 20, height: 20, borderRadius: 10, backgroundColor: "red"}}/>*/}
+        </View>
     )
 }
 
@@ -41,5 +46,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 3,
+        flexDirection: "row",
+        alignItems: "center"
     },
+    error: {
+        shadowColor: "red"
+    }
 });

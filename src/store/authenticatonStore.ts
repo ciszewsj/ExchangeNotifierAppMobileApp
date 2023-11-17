@@ -3,10 +3,7 @@ import {auth} from "../firebase/firebase"
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
 import {NavigationProp} from "@react-navigation/core/src/types";
 
-export const InvalidAuthErrors = {
-    INVALID_EMAIL: "auth/invalid-email"
-} as const
-
+export const INVALID_EMAIL = "auth/invalid-email"
 
 interface AuthenticationController {
     loginData: {
@@ -20,12 +17,16 @@ interface AuthenticationController {
     resetPasswordData: {
         email: string
         isProcessing: boolean,
-        status?: keyof typeof InvalidAuthErrors
+        isEmailCorrect: boolean,
+        annotation?: string | undefined,
+        status?: "auth/invalid-email" | string,
+        finished: boolean
     }
 
     navigation?: NavigationProp<ReactNavigation.RootParamList>,
     changeLogin: (login: string) => void,
-    changePassword: (password: string) => void
+    changePassword: (password: string) => void,
+    changeRestorePasswordEmail: (login: string) => void,
     navigateToRegister: () => void,
     navigateToRestorePassword: () => void,
     bindNavigation: (nav: NavigationProp<ReactNavigation.RootParamList>) => void,
@@ -41,13 +42,18 @@ export const useStore = create<AuthenticationController>((set) => ({
         password: ""
     },
     resetPasswordData: {
-        email: ""
+        email: "",
+        isProcessing: false,
+        isEmailCorrect: true,
+        annotation: false,
+        status: null,
+        finished: false
     },
     navigation: undefined,
     changeLogin: (login) => set(state => ({
         ...state,
         loginData: {
-            ...useStore.getState().loginData,
+            ...state.loginData,
             email: login
         }
     })),
@@ -58,6 +64,15 @@ export const useStore = create<AuthenticationController>((set) => ({
             password: password
         }
     })),
+    changeRestorePasswordEmail: (login) => {
+        set(state => ({
+            ...state,
+            resetPasswordData: {
+                ...state.resetPasswordData,
+                email: login
+            }
+        }))
+    },
     loginWithEmailAndPassword: async () => {
         signInWithEmailAndPassword(auth, useStore.getState().loginData.email, useStore.getState().loginData.password)
             .then(response => {
@@ -78,12 +93,49 @@ export const useStore = create<AuthenticationController>((set) => ({
     },
 
     sendResetPasswordEmail: async () => {
+        set(state => ({
+            ...state,
+            resetPasswordData: {
+                ...state.resetPasswordData,
+                isProcessing: true
+            }
+        }))
         sendPasswordResetEmail(auth, useStore.getState().resetPasswordData.email).then(
             response => {
-                console.log("response", response)
+                set(state => ({
+                    ...state,
+                    resetPasswordData: {
+                        ...state.resetPasswordData,
+                        isProcessing: false,
+                        finished: true,
+                        isEmailCorrect: true
+                    }
+                }))
             })
             .catch(reason => {
-                console.log("Reason", reason.code)
+                if (reason.code === INVALID_EMAIL) {
+                    set(state => ({
+                        ...state,
+                        resetPasswordData: {
+                            ...state.resetPasswordData,
+                            isProcessing: false,
+                            finished: false,
+                            isEmailCorrect: false,
+                            annotation: reason.code
+                        }
+                    }))
+                } else {
+                    set(state => ({
+                        ...state,
+                        resetPasswordData: {
+                            ...state.resetPasswordData,
+                            isProcessing: false,
+                            finished: false,
+                            isEmailCorrect: true,
+                            annotation: reason.code
+                        }
+                    }))
+                }
             });
     },
     navigateToRegister: () => {
