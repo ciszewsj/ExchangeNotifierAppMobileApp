@@ -3,29 +3,48 @@ import {Text, View} from "react-native";
 import {InputData} from "../atoms/InputData";
 import {NormalButton} from "../atoms/NormalButton";
 import {useStore} from "../store/store";
+import {TextButton} from "../atoms/TextButton";
+import {DataModal} from "../atoms/DataModal";
+import {ButtonText} from "../topography/ButtonText";
 
 export const LoginOrganism: FC<{}> = ({}) => {
-    const login = useStore((state) => state.login);
+    const login = useStore((state) => state.loginData.email);
     const changeLogin = useStore((state) => state.changeLogin);
 
-    const password = useStore((state) => state.password);
+    const password = useStore((state) => state.loginData.password);
     const changePassword = useStore((state) => state.changePassword);
 
     const loginWithEmailAndPassword = useStore((state) => state.loginWithEmailAndPassword);
+
+    const navigateToRegister = useStore((state) => state.navigateToRegister);
+    const navigateToRestorePassword = useStore((state) => state.navigateToRestorePassword);
+
 
     return (
         <View style={{gap: 5}}>
             <Text>Input email:</Text>
             <InputData value={login} keyboardType={"email-address"} onChange={(e) => changeLogin(e)}
-                       placeholder={"Login"}/>
+                       placeholder={"Email"}/>
             <Text>Input Password:</Text>
             <InputData value={password} secureText={true} onChange={(e) => changePassword(e)}
                        placeholder={"Password"}/>
-            <Text>Forget password? SEND EMAIL</Text>
+            <Text>Forget password?&nbsp;
+                <TextButton text={"SEND EMAIL"}
+                            onPress={() => navigateToRestorePassword()}/>
+            </Text>
             <NormalButton onPress={loginWithEmailAndPassword}>
-                <Text style={{textAlign: "center"}}>Sign in</Text>
+                <ButtonText>Sign in</ButtonText>
             </NormalButton>
-            <Text>Haven't got account yet? REGISTER</Text>
+            <Text>Haven't got account yet?&nbsp;
+                <TextButton text={"REGISTER"}
+                            onPress={() => navigateToRegister()}/>
+            </Text>
+            <DataModal title={"Login error"}>
+                <Text>Problem during log in</Text>
+                <NormalButton>
+                    <ButtonText>Ok!</ButtonText>
+                </NormalButton>
+            </DataModal>
         </View>
     );
 };

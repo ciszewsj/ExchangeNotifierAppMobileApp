@@ -3,9 +3,9 @@ import {FC} from "react";
 import {KeyboardTypeOptions} from "react-native/Libraries/Components/TextInput/TextInput";
 
 export const InputData: FC<{
-    value: any,
-    onChange: any,
-    placeholder: string,
+    value?: any,
+    onChange?: any,
+    placeholder?: string,
     keyboardType?: KeyboardTypeOptions | undefined,
     secureText?: boolean | undefined
 }> = ({

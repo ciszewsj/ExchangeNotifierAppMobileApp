@@ -1,4 +1,3 @@
-import {StyleSheet, View} from 'react-native';
 import {AuthenticationRouter} from "./src/routers/AuthenticationRouter";
 import 'react-native-gesture-handler';
 import {NavigationContainer} from "@react-navigation/native";

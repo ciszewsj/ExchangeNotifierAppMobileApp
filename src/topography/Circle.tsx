@@ -7,6 +7,8 @@ export const Circle: FC<{ children?: any | undefined }> = ({children}) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+            minHeight:300,
+            maxHeight: 350
         }}>
             <View style={{
                 backgroundColor: "#D9D9D9",
