@@ -1,8 +1,8 @@
 import {create} from 'zustand'
 import {auth} from "../firebase/firebase"
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
+import {createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword} from "firebase/auth";
 import {NavigationProp} from "@react-navigation/core/src/types";
-import {isEmailValid} from "../utils/LoginUtils";
+import {isEmailValid, isPasswordValid} from "../utils/LoginUtils";
 
 export const INVALID_EMAIL = "auth/invalid-email"
 export const AUTH_SUCCESS = "auth/success"
@@ -16,7 +16,13 @@ interface AuthenticationController {
     },
     registerData: {
         email: string,
-        password: string
+        emailAnnotation?: string | undefined,
+        password: string,
+        passwordAnnotation?: string | undefined,
+        repeatPassword: string,
+        repeatPasswordAnnotation?: string | undefined,
+        isProcessing: boolean,
+        status?: "auth/success" | "auth/email-already-in-use" | "auth/invalid-email" | "auth/weak-password" | "auth/missing-password" | "unknown" | string
     },
     resetPasswordData: {
         email: string
@@ -38,9 +44,15 @@ interface AuthenticationController {
     bindNavigation: (nav: NavigationProp<ReactNavigation.RootParamList>) => void,
 
     loginWithEmailAndPassword: () => void,
-    registerWithEmailAndPassword: () => void,
     sendResetPasswordEmail: () => void,
-    closeResetPasswordModal: () => void
+    closeResetPasswordModal: () => void,
+
+    changeRegisterEmail: (email: string) => void
+    changeRegisterPassword: (password: string) => void
+    changeRepeatRegisterPassword: (password: string) => void
+    registerUserWithEmailAndPassword: () => void
+    closeRegisterUserModal: () => void
+    navigateBackToLoginFromRegister: () => void
 }
 
 const initialState = {
@@ -55,6 +67,16 @@ const initialState = {
         annotation: false,
         status: null,
     },
+    registerData: {
+        email: "",
+        emailAnnotation: undefined,
+        password: "",
+        passwordAnnotation: undefined,
+        repeatPassword: "",
+        repeatPasswordAnnotation: undefined,
+        isProcessing: false,
+        status: null
+    }
 }
 
 export const useStore = create<AuthenticationController>((set) => ({
@@ -86,15 +108,6 @@ export const useStore = create<AuthenticationController>((set) => ({
     },
     loginWithEmailAndPassword: async () => {
         signInWithEmailAndPassword(auth, useStore.getState().loginData.email, useStore.getState().loginData.password)
-            .then(response => {
-                alert(JSON.stringify(response))
-            }).catch(reason => {
-            console.log(reason.code)
-            alert(reason.message)
-        })
-    },
-    registerWithEmailAndPassword: () => {
-        createUserWithEmailAndPassword(auth, useStore.getState().loginData.email, useStore.getState().loginData.password)
             .then(response => {
                 alert(JSON.stringify(response))
             }).catch(reason => {
@@ -187,5 +200,87 @@ export const useStore = create<AuthenticationController>((set) => ({
         if (useStore.getState().navigation != undefined) {
             useStore.getState().navigation.navigate("Login", {})
         }
-    }
+    },
+    changeRegisterEmail: (email: string) => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...state.registerData,
+                email: email,
+                emailAnnotation: isEmailValid(email) ? null : "Email is not valid!"
+            }
+        }))
+    },
+    changeRegisterPassword: (password: string) => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...state.registerData,
+                password: password,
+                passwordAnnotation: isPasswordValid(password) ? null : "Password is to weak!"
+            }
+        }))
+    },
+    changeRepeatRegisterPassword: (password: string) => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...state.registerData,
+                repeatPassword: password,
+                repeatPasswordAnnotation: password === state.registerData.password ? null : "Passwords are not identical!"
+            }
+        }))
+    },
+    registerUserWithEmailAndPassword: () => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...state.registerData,
+                isProcessing: true
+            }
+        }))
+        createUserWithEmailAndPassword(auth, useStore.getState().registerData.email, useStore.getState().registerData.password)
+            .then(response => {
+                console.log(JSON.stringify(response))
+                set(state => ({
+                    ...state,
+                    registerData: {
+                        ...state.registerData,
+                        status: "auth/success",
+                        isProcessing: false
+                    }
+                }))
+            })
+            .catch(reason => {
+                set(state => ({
+                    ...state,
+                    registerData: {
+                        ...state.registerData,
+                        status: reason.code != null ? reason.code : "unknown",
+                        isProcessing: false
+                    }
+                }))
+            })
+    },
+    closeRegisterUserModal: () => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...state.registerData,
+                status: null
+            }
+        }))
+    },
+    navigateBackToLoginFromRegister: () => {
+        useStore.getState().navigation.navigate("Login", {})
+        set(state => ({
+            ...state,
+            loginData: {
+                ...state.registerData,
+                email: state.registerData.email
+            }
+        }))
+    },
+
+
 }))
