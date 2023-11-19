@@ -2,8 +2,12 @@ import {create} from 'zustand'
 import {auth} from "../firebase/firebase"
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
 import {NavigationProp} from "@react-navigation/core/src/types";
+import {isEmailValid} from "../utils/LoginUtils";
 
 export const INVALID_EMAIL = "auth/invalid-email"
+export const AUTH_SUCCESS = "auth/success"
+export const INTERNET_ERROR = "auth/network-request-failed"
+export const AUTH_MISSING = "auth/missing-email"
 
 interface AuthenticationController {
     loginData: {
@@ -19,8 +23,7 @@ interface AuthenticationController {
         isProcessing: boolean,
         isEmailCorrect: boolean,
         annotation?: string | undefined,
-        status?: "auth/invalid-email" | string,
-        finished: boolean
+        status?: "auth/success" | "auth/invalid-email" | "auth/missing-email" | "unknown" | "auth/network-request-failed" | string
     }
 
     navigation?: NavigationProp<ReactNavigation.RootParamList>,
@@ -29,14 +32,18 @@ interface AuthenticationController {
     changeRestorePasswordEmail: (login: string) => void,
     navigateToRegister: () => void,
     navigateToRestorePassword: () => void,
+
+    navigateBackToLoginFromRestore: () => void,
+
     bindNavigation: (nav: NavigationProp<ReactNavigation.RootParamList>) => void,
 
     loginWithEmailAndPassword: () => void,
     registerWithEmailAndPassword: () => void,
-    sendResetPasswordEmail: () => void
+    sendResetPasswordEmail: () => void,
+    closeResetPasswordModal: () => void
 }
 
-export const useStore = create<AuthenticationController>((set) => ({
+const initialState = {
     loginData: {
         email: "",
         password: ""
@@ -47,8 +54,11 @@ export const useStore = create<AuthenticationController>((set) => ({
         isEmailCorrect: true,
         annotation: false,
         status: null,
-        finished: false
     },
+}
+
+export const useStore = create<AuthenticationController>((set) => ({
+    ...initialState,
     navigation: undefined,
     changeLogin: (login) => set(state => ({
         ...state,
@@ -69,7 +79,8 @@ export const useStore = create<AuthenticationController>((set) => ({
             ...state,
             resetPasswordData: {
                 ...state.resetPasswordData,
-                email: login
+                email: login,
+                annotation: isEmailValid(login) ? null : "Email is not valid!"
             }
         }))
     },
@@ -101,27 +112,26 @@ export const useStore = create<AuthenticationController>((set) => ({
             }
         }))
         sendPasswordResetEmail(auth, useStore.getState().resetPasswordData.email).then(
-            response => {
+            () => {
                 set(state => ({
                     ...state,
                     resetPasswordData: {
                         ...state.resetPasswordData,
                         isProcessing: false,
-                        finished: true,
+                        status: "auth/success",
                         isEmailCorrect: true
                     }
                 }))
             })
             .catch(reason => {
-                if (reason.code === INVALID_EMAIL) {
+                if (reason.code !== null) {
                     set(state => ({
                         ...state,
                         resetPasswordData: {
                             ...state.resetPasswordData,
                             isProcessing: false,
-                            finished: false,
+                            status: reason.code,
                             isEmailCorrect: false,
-                            annotation: reason.code
                         }
                     }))
                 } else {
@@ -130,9 +140,8 @@ export const useStore = create<AuthenticationController>((set) => ({
                         resetPasswordData: {
                             ...state.resetPasswordData,
                             isProcessing: false,
-                            finished: false,
+                            status: "unknown",
                             isEmailCorrect: true,
-                            annotation: reason.code
                         }
                     }))
                 }
@@ -147,7 +156,7 @@ export const useStore = create<AuthenticationController>((set) => ({
         set(state => ({
             ...state,
             resetPasswordData: {
-                ...useStore.getState().resetPasswordData,
+                ...initialState.resetPasswordData,
                 email: useStore.getState().loginData.email
             }
         }));
@@ -157,5 +166,26 @@ export const useStore = create<AuthenticationController>((set) => ({
     },
     bindNavigation: (nav) => {
         set((state) => ({...state, navigation: nav}))
+    },
+    closeResetPasswordModal: () => {
+        set(state => ({
+            ...state,
+            resetPasswordData: {
+                ...useStore.getState().resetPasswordData,
+                status: null
+            }
+        }));
+    },
+    navigateBackToLoginFromRestore: () => {
+        set(state => ({
+            ...state,
+            loginData: {
+                ...initialState.loginData,
+                email: useStore.getState().resetPasswordData.email
+            }
+        }));
+        if (useStore.getState().navigation != undefined) {
+            useStore.getState().navigation.navigate("Login", {})
+        }
     }
 }))

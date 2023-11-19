@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
 import {Circle} from "../topography/Circle";
+import {Fontisto} from '@expo/vector-icons';
 
 export const MainMenuTemplate: FC<{ children: any }> = ({children}) => {
 
@@ -9,7 +10,9 @@ export const MainMenuTemplate: FC<{ children: any }> = ({children}) => {
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.content}>
                     <View style={{flex: 1, minHeight: 250}}>
-                        <Circle/>
+                        <Circle>
+                            <Fontisto name="money-symbol" size={128} color="black"/>
+                        </Circle>
                     </View>
                 </View>
                 <View style={{margin: 25}}>

@@ -7,7 +7,7 @@ export const Circle: FC<{ children?: any | undefined }> = ({children}) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight:300,
+            minHeight: 300,
             maxHeight: 350
         }}>
             <View style={{
@@ -21,7 +21,9 @@ export const Circle: FC<{ children?: any | undefined }> = ({children}) => {
                 },
                 shadowRadius: 4,
                 elevation: 3,
-                shadowColor: "black"
+                shadowColor: "black",
+                justifyContent: "center",
+                alignItems: "center"
             }}>
                 {children}
             </View>

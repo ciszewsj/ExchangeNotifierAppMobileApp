@@ -1,15 +1,26 @@
-import {FC} from "react";
-import {Pressable, StyleSheet} from "react-native";
+import React, {FC} from "react";
+import {ActivityIndicator, Pressable, StyleSheet, Text, View} from "react-native";
 import {GestureResponderEvent} from "react-native/Libraries/Types/CoreEventTypes";
 
 export const NormalButton: FC<{
-    children: FC;
+    text: string;
     onPress?: null | ((event: GestureResponderEvent) => void) | undefined;
-}> = ({children, onPress}) => {
+    isActive?: boolean;
+    isProcessing?: boolean;
+}> = ({onPress, text, isActive, isProcessing}) => {
 
     return (
-        <Pressable style={styles.textInput} onPress={onPress}>
-            {children}
+        <Pressable style={[styles.textInput, !isActive && {backgroundColor: "#D9D9D9"}]} onPress={onPress}
+                   disabled={!isActive}>
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center"}}>
+                    <Text style={{textAlign: "center", color: "black"}}>{text}</Text>
+                </View>
+                {isProcessing &&
+                    <View style={{marginLeft: 5}}>
+                        <ActivityIndicator color={"black"}/>
+                    </View>}
+            </View>
         </Pressable>
     )
 }

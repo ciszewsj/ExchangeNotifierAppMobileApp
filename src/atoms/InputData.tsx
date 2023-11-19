@@ -1,22 +1,33 @@
-import {StyleSheet, TextInput, View} from "react-native";
-import {FC} from "react";
+import {StyleSheet, TextInput, Text, View, Pressable} from "react-native";
+import {FC, useState} from "react";
 import {KeyboardTypeOptions} from "react-native/Libraries/Components/TextInput/TextInput";
+import {MaterialIcons} from '@expo/vector-icons';
+import Tooltip, {Placement} from "react-native-tooltip-2";
 
 export const InputData: FC<{
     value?: any,
     onChange?: any,
     placeholder?: string,
     keyboardType?: KeyboardTypeOptions | undefined,
-    secureText?: boolean | undefined
+    isActive?: boolean;
+    secureText?: boolean | undefined;
+    description?: string | null;
 }> = ({
           value,
           onChange,
           placeholder,
           keyboardType,
-          secureText
+          isActive,
+          secureText,
+          description
+
       }) => {
+    const [isFocused, setIsFocused] = useState(false)
+    const [used, setUsed] = useState(false)
+
     return (
-        <View style={{...styles.textInput, }}>
+        <View
+            style={[styles.textInput, !isActive && {backgroundColor: "#D9D9D9"}, isActive && description != null && description.length > 0 && {shadowColor: "red"}]}>
             <View style={{flex: 1}}>
                 <TextInput
                     defaultValue={"TEXT"}
@@ -26,9 +37,27 @@ export const InputData: FC<{
                     keyboardType={keyboardType}
                     onChangeText={e => {
                         onChange(e)
-                    }}/>
+                    }}
+                    editable={isActive}
+                    onFocus={() => (setIsFocused(true))}
+                    onBlur={() => (setIsFocused(false))}/>
             </View>
-            {/*<View style={{width: 20, height: 20, borderRadius: 10, backgroundColor: "red"}}/>*/}
+            {!isFocused && description != null && description.length > 0 &&
+                <View>
+                    <Tooltip isVisible={used}
+                             content={<Text>{description}< /Text>}
+                             placement={Placement.TOP}
+                             onClose={() => {
+                                 setUsed(false)
+                             }}>
+                        <Pressable onPress={() => {
+                            setUsed(true)
+                        }}>
+                            <MaterialIcons name="error-outline" size={24} color="red"/>
+                        </Pressable>
+                    </Tooltip>
+                </View>
+            }
         </View>
     )
 }

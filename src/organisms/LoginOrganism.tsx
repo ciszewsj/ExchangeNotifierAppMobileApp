@@ -32,18 +32,14 @@ export const LoginOrganism: FC<{}> = ({}) => {
                 <TextButton text={"SEND EMAIL"}
                             onPress={() => navigateToRestorePassword()}/>
             </Text>
-            <NormalButton onPress={loginWithEmailAndPassword}>
-                <ButtonText>Sign in</ButtonText>
-            </NormalButton>
+            <NormalButton onPress={loginWithEmailAndPassword} text={"Sign in"}/>
             <Text>Haven't got account yet?&nbsp;
                 <TextButton text={"REGISTER"}
                             onPress={() => navigateToRegister()}/>
             </Text>
             <DataModal visible={false} title={"Login error"}>
                 <Text>Problem during log in</Text>
-                <NormalButton>
-                    <ButtonText>Ok!</ButtonText>
-                </NormalButton>
+                <NormalButton text={"Ok!"}/>
             </DataModal>
         </View>
     );

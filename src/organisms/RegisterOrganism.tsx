@@ -13,8 +13,6 @@ export const RegisterOrganism: FC<{}> = () => {
         <InputData/>
         <Text>Input password:</Text>
         <InputData/>
-        <NormalButton>
-            <Text style={{textAlign: "center"}}>Register</Text>
-        </NormalButton>
+        <NormalButton text={"Register"}/>
     </View>)
 }
