@@ -77,6 +77,10 @@ export const RegisterOrganism: FC<{}> = () => {
         }
 
     }
+    console.log(data)
+
+    let couldBeSend = data.password === data.repeatPassword
+
     return (<View style={{gap: 5}}>
         <Text>Input email:</Text>
         <InputData value={data.email} isActive={!data.isProcessing} onChange={changeRegisterEmail}
@@ -92,7 +96,8 @@ export const RegisterOrganism: FC<{}> = () => {
                    placeholder={"Repeat password"}
                    description={data.repeatPasswordAnnotation != null ? data.repeatPasswordAnnotation : null}
         />
-        <NormalButton isActive={!data.isProcessing} text={"Register"} onPress={registerWithEmailAndPassword}
+        <NormalButton isActive={!data.isProcessing && couldBeSend} text={"Register"}
+                      onPress={registerWithEmailAndPassword}
                       isProcessing={data.isProcessing}/>
         <DataModal title={data.status === AUTH_SUCCESS ? "Link send" : "Error"} onRequestClose={() => {
             if (data.status === AUTH_SUCCESS) {

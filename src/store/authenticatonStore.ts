@@ -1,6 +1,11 @@
 import {create} from 'zustand'
 import {auth} from "../firebase/firebase"
-import {createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signOut
+} from "firebase/auth";
 import {NavigationProp} from "@react-navigation/core/src/types";
 import {isEmailValid, isPasswordValid} from "../utils/LoginUtils";
 
@@ -12,7 +17,11 @@ export const AUTH_MISSING = "auth/missing-email"
 interface AuthenticationController {
     loginData: {
         email: string,
+        emailAnnotation?: string | undefined,
         password: string,
+        passwordAnnotation?: string | undefined,
+        isProcessing: boolean,
+        status: "auth/invalid-login-credentials" | "auth/invalid-email" | "auth/missing-password" | string
     },
     registerData: {
         email: string,
@@ -53,12 +62,18 @@ interface AuthenticationController {
     registerUserWithEmailAndPassword: () => void
     closeRegisterUserModal: () => void
     navigateBackToLoginFromRegister: () => void
+
+    closeLoginModal: () => void
 }
 
 const initialState = {
     loginData: {
         email: "",
-        password: ""
+        password: "",
+        emailAnnotation: null,
+        passwordAnnotation: null,
+        isProcessing: false,
+        status: null
     },
     resetPasswordData: {
         email: "",
@@ -86,7 +101,8 @@ export const useStore = create<AuthenticationController>((set) => ({
         ...state,
         loginData: {
             ...state.loginData,
-            email: login
+            email: login,
+            emailAnnotation: isEmailValid(login) ? null : "Email is not valid!"
         }
     })),
     changePassword: (password) => set(state => ({
@@ -107,12 +123,25 @@ export const useStore = create<AuthenticationController>((set) => ({
         }))
     },
     loginWithEmailAndPassword: async () => {
+        set(state => ({
+            ...state,
+            loginData: {
+                ...state.loginData,
+                isProcessing: true,
+            }
+        }))
         signInWithEmailAndPassword(auth, useStore.getState().loginData.email, useStore.getState().loginData.password)
             .then(response => {
                 alert(JSON.stringify(response))
             }).catch(reason => {
-            console.log(reason.code)
-            alert(reason.message)
+            set(state => ({
+                ...state,
+                loginData: {
+                    ...state.loginData,
+                    isProcessing: false,
+                    status: reason.code != null ? reason.code : "undefined"
+                }
+            }))
         })
     },
 
@@ -161,6 +190,12 @@ export const useStore = create<AuthenticationController>((set) => ({
             });
     },
     navigateToRegister: () => {
+        set(state => ({
+            ...state,
+            registerData: {
+                ...initialState.registerData
+            }
+        }))
         if (useStore.getState().navigation != undefined) {
             useStore.getState().navigation.navigate("Register", {})
         }
@@ -217,6 +252,7 @@ export const useStore = create<AuthenticationController>((set) => ({
             registerData: {
                 ...state.registerData,
                 password: password,
+                repeatPasswordAnnotation: password === state.registerData.repeatPassword ? null : "Passwords are not identical!",
                 passwordAnnotation: isPasswordValid(password) ? null : "Password is to weak!"
             }
         }))
@@ -240,8 +276,9 @@ export const useStore = create<AuthenticationController>((set) => ({
             }
         }))
         createUserWithEmailAndPassword(auth, useStore.getState().registerData.email, useStore.getState().registerData.password)
-            .then(response => {
+            .then(async response => {
                 console.log(JSON.stringify(response))
+                await signOut(auth)
                 set(state => ({
                     ...state,
                     registerData: {
@@ -281,6 +318,14 @@ export const useStore = create<AuthenticationController>((set) => ({
             }
         }))
     },
-
+    closeLoginModal: () => {
+        set(state => ({
+            ...state,
+            loginData: {
+                ...state.loginData,
+                status: null
+            }
+        }))
+    }
 
 }))
