@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "376893543666",
+    "firebase_url": "https://exchangenotifierapp-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "exchangenotifierapp",
+    "storage_bucket": "exchangenotifierapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376893543666:android:5f21a3b06f6b8c27206c6b",
+        "android_client_info": {
+          "package_name": "ee.ciszewsj.exchangeRateNotifier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGLy2F8oNUMwG4bAhPN0URxFw4MUAbUHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

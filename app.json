@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "exchange-notifier-app",
-    "slug": "exchange-notifier-app",
+    "slug": "exchangeratenotifierapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "ee.ciszewsj.exchangenotifierapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +31,12 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/auth"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7b7b7e03-9459-4a44-bdc8-a709d90c3b03"
+      }
+    },
+    "owner": "ciszewsj"
   }
 }

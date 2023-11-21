@@ -1,5 +1,6 @@
 import * as firebase from "firebase/app";
 import {getAuth} from "firebase/auth";
+import {getMessaging} from "firebase/messaging";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCQXMppxVkGmj8amuNE0zCZTL_ya_rfOmk",
@@ -25,3 +26,7 @@ const auth = getAuth(app)
 console.log("NAME ? ", auth.app.name)
 
 export {auth}
+
+const messaging = getMessaging(app)
+
+export {messaging}
