@@ -1,31 +1,14 @@
 import React, {FC} from "react";
 import {AppViewTemplate} from "../templates/AppViewTemplate";
-import {KeyboardAvoidingView, ScrollView, View, StyleSheet, Text} from "react-native";
-import {InputData} from "../atoms/InputData";
-import {Octicons} from '@expo/vector-icons';
-import {NormalButton} from "../atoms/NormalButton";
+import {KeyboardAvoidingView, ScrollView, StyleSheet} from "react-native";
+import {CreateNewOrganism} from "../organisms/CreateNewOrganism";
 
 export const CreateNewPage: FC<{}> = () => {
     return (
         <AppViewTemplate>
             <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                    <View style={{padding: 15, flexGrow: 1}}>
-                        <View style={styles.content}/>
-                        <View style={{justifyContent: "center", flexGrow: 1}}>
-                            <Text>Main currency:</Text>
-                            <InputData/>
-                        </View>
-                        <View style={{justifyContent: "center", alignItems: "center", flexGrow: 1}}>
-                            <Octicons name="arrow-switch" size={54} color="black"/>
-                        </View>
-                        <View style={{justifyContent: "center", flexGrow: 1}}>
-                            <Text>Secondary currency:</Text>
-                            <InputData/>
-                        </View>
-                        <View style={styles.content}/>
-                        <NormalButton text={"Create"}/>
-                    </View>
+                    <CreateNewOrganism/>
                 </ScrollView>
             </KeyboardAvoidingView>
         </AppViewTemplate>
