@@ -72,9 +72,22 @@ export const useAddNotificationStore = create<AddNotificationController>((set) =
             }))
             getDoc(docRef)
                 .then(async (snapshot) => {
-                    let data: NotificationSettingEntity | null = null
+                    let data: NotificationSettingEntity | null
                     if (snapshot.exists()) {
                         const docData = snapshot.data() as UserSettings;
+
+                        let val = docData.notification_settings.find(value => value.currencySymbol === mainSymbol &&
+                            value.secondCurrencySymbol === secondSymbol)
+                        if (val) {
+                            navigate.navigate("EUR-USD", {...val})
+                            set(state => ({
+                                ...state,
+                                isProcessing: false,
+                                currentSecondaryCurrency: null,
+                                currentMainCurrency: null
+                            }))
+                            return
+                        }
                         data = {
                             currencySymbol: mainSymbol,
                             secondCurrencySymbol: secondSymbol,
