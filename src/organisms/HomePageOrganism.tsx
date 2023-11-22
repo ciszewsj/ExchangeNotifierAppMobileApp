@@ -1,12 +1,10 @@
 import {FC} from "react";
 import {InputData} from "../atoms/InputData";
 import {FlatList, View} from "react-native";
-import {useNavigation} from "@react-navigation/native";
 import {useHomePageStore} from "../store/homePageStore";
 import {CurrencyLabel} from "../molecules/CurrencyLabel";
 
 export const HomePageOrganism: FC<{}> = () => {
-    const nav = useNavigation()
     const notificationSettings = useHomePageStore().notification_settings
 
     return (

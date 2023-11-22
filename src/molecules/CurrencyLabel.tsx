@@ -10,7 +10,7 @@ export const CurrencyLabel: FC<{ currency: NotificationSettingEntity }> = ({curr
     return (
         <View style={{margin: 5}}>
             <Pressable onPress={() => {
-                nav.navigate("EUR-USD", {})
+                nav.navigate("EUR-USD", {...currency})
             }}>
                 <Card>
                     <View style={{flexDirection: "row", gap: 5}}>
