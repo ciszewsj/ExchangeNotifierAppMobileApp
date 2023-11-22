@@ -1,39 +1,35 @@
 import {FC, useEffect, useMemo, useState} from "react";
 import {auth, firestore} from "../firebase/firebase";
-import {onSnapshot, doc} from "firebase/firestore"
 import {ApplicationRouter} from "./ApplicationRouter";
 import {AuthenticationRouter} from "./AuthenticationRouter";
-import {Unsubscribe} from "@firebase/firestore";
+import {doc, onSnapshot} from "firebase/firestore";
+import {useAddNotificationStore} from "../store/addCurrenciesStore";
 
 export const Temp: FC<{}> = () => {
 
     const [isLogged, setIsLogged] = useState(false)
 
+    const updatePossibleOptions = useAddNotificationStore().updatePossibleOptions
 
-    const snapshotListener: Unsubscribe = useMemo(() => {
-        const documentRef = doc(firestore, 'messages', 'VAEm3n44gAYzVbVskrQX');
+    const listener = useMemo(() => {
+        const documentRef = doc(firestore, 'SETTINGS', 'CURRENCIES');
 
         return onSnapshot(documentRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.data();
-                console.log('Aktualne dane:', data);
+                updatePossibleOptions(data.currenciesList)
             } else {
-                console.log('Dokument nie istnieje');
             }
         });
     }, [firestore]);
-
     useEffect(() => {
-        const unsubscribe = snapshotListener;
-        return () => {
-            unsubscribe();
-        };
-    }, [snapshotListener]);
-
-    useEffect(() => {
-
-    }, [auth])
-
+        if (isLogged) {
+            const unsubscribe = listener
+            return () => {
+                unsubscribe();
+            };
+        }
+    }, [listener, isLogged])
     auth.onAuthStateChanged(state => {
         if (state?.refreshToken != null) {
             setIsLogged(true)

@@ -12,7 +12,6 @@ export const RestorePasswordOrganism: FC<{}> = () => {
     const closeResetPasswordModal = useStore((state) => state.closeResetPasswordModal);
     const navigateBackToLoginFromRestore = useStore((state) => state.navigateBackToLoginFromRestore);
 
-    console.log(data)
 
     const renderModalBody = () => {
         switch (data.status) {

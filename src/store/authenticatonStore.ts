@@ -276,7 +276,6 @@ export const useStore = create<AuthenticationController>((set) => ({
         }))
         createUserWithEmailAndPassword(auth, useStore.getState().registerData.email, useStore.getState().registerData.password)
             .then(async response => {
-                console.log(JSON.stringify(response))
                 await signOut(auth)
                 set(state => ({
                     ...state,

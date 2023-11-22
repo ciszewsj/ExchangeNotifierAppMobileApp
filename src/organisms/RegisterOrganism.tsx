@@ -14,7 +14,6 @@ export const RegisterOrganism: FC<{}> = () => {
     const closeRegisterUserModal = useStore((state) => state.closeRegisterUserModal);
     const navigateBackToLoginFromRegister = useStore((state) => state.navigateBackToLoginFromRegister);
 
-    console.log(data)
 
     const renderModalBody = () => {
         switch (data.status) {
@@ -77,7 +76,6 @@ export const RegisterOrganism: FC<{}> = () => {
         }
 
     }
-    console.log(data)
 
     let couldBeSend = data.password === data.repeatPassword
 

@@ -17,7 +17,6 @@ export const LoginOrganism: FC<{}> = ({}) => {
     const navigateToRegister = useStore((state) => state.navigateToRegister);
     const navigateToRestorePassword = useStore((state) => state.navigateToRestorePassword);
 
-    console.log(data)
 
     const renderModal = () => {
         switch (data.status) {
