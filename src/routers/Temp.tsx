@@ -2,18 +2,35 @@ import {FC, useEffect, useMemo, useState} from "react";
 import {auth, firestore} from "../firebase/firebase";
 import {ApplicationRouter} from "./ApplicationRouter";
 import {AuthenticationRouter} from "./AuthenticationRouter";
-import {doc, onSnapshot} from "firebase/firestore";
+import {doc, onSnapshot, setDoc} from "firebase/firestore";
 import {useAddNotificationStore} from "../store/addCurrenciesStore";
+import {useHomePageStore} from "../store/homePageStore";
+import {UserSettings} from "../firebase/UserSettings";
 
 export const Temp: FC<{}> = () => {
 
     const [isLogged, setIsLogged] = useState(false)
 
     const updatePossibleOptions = useAddNotificationStore().updatePossibleOptions
+    const updateUserNotifications = useHomePageStore().updateUserNotifications
+
+    const settingsListener = useMemo(() => {
+        if (!auth.currentUser) {
+            return null
+        }
+        let uid = auth.currentUser.uid
+        const documentRef = doc(firestore, 'USERS_SETTINGS', uid);
+        return onSnapshot(documentRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.data() as UserSettings;
+                updateUserNotifications(data.notification_settings)
+            } else {
+            }
+        });
+    }, [isLogged, firestore])
 
     const listener = useMemo(() => {
         const documentRef = doc(firestore, 'SETTINGS', 'CURRENCIES');
-
         return onSnapshot(documentRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.data();
@@ -30,6 +47,18 @@ export const Temp: FC<{}> = () => {
             };
         }
     }, [listener, isLogged])
+    useEffect(() => {
+        if (isLogged) {
+            const unsubscribe = settingsListener
+            if (!unsubscribe) {
+                return
+            }
+            return () => {
+                unsubscribe();
+            };
+        }
+    }, [settingsListener, isLogged])
+
     auth.onAuthStateChanged(state => {
         if (state?.refreshToken != null) {
             setIsLogged(true)
