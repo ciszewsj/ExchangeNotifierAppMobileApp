@@ -24,7 +24,7 @@ export const NotificationSettingsPage: FC<{}> = () => {
         }
     }, [settings])
 
-    return <View>
+    return (<View>
         <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={{padding: 15, flexGrow: 1}}>
@@ -32,7 +32,7 @@ export const NotificationSettingsPage: FC<{}> = () => {
                         <Card>
                             <View style={{alignItems: "center", flexDirection: "row"}}>
                                 <View style={{flex: 1}}>
-                                    <Text>All notifications</Text>
+                                    <Text>Notifications</Text>
                                 </View>
                                 <Switch/>
                             </View>
@@ -45,7 +45,7 @@ export const NotificationSettingsPage: FC<{}> = () => {
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
-    </View>
+    </View>)
 }
 const styles = StyleSheet.create({
     scrollViewContent: {
