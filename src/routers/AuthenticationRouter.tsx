@@ -12,7 +12,6 @@ export const AuthenticationRouter: FC<{}> = () => {
 
 
     const navigation = useNavigation();
-    console.log("bind navigation")
     const bindNavigation = useStore((state) => state.bindNavigation);
     bindNavigation(navigation);
 

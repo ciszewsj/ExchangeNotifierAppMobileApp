@@ -14,6 +14,7 @@ const initial_state = {
 export const useHomePageStore = create<HomePageController>((set) => ({
     ...initial_state,
     updateUserNotifications: (entities) => {
+        // console
         set(state => ({
             ...state,
             notification_settings: entities

@@ -4,14 +4,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {View} from "react-native";
 import {HomePage} from "../pages/HomePage";
 import {AppViewTemplate} from "../templates/AppViewTemplate";
-import {NotificationSettingEntity, UserSettings} from "../firebase/UserSettings";
+import {NotificationSettingEntity} from "../firebase/UserSettings";
+import {NotificationSettingsPage} from "../pages/NotificationSettingsPage";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 export const InsideHomeRouter: FC<{ route, navigation }> = ({route, navigation}) => {
-
-    console.log(route.params)
 
     const values: NotificationSettingEntity = route.params as NotificationSettingEntity
 
@@ -26,7 +25,7 @@ export const InsideHomeRouter: FC<{ route, navigation }> = ({route, navigation})
             <Tab.Navigator>
                 <Tab.Screen name="Rate" component={View}/>
                 <Tab.Screen name="Convert" component={View}/>
-                <Tab.Screen name="Settings" component={View}/>
+                <Tab.Screen name="Settings" component={NotificationSettingsPage} initialParams={{settings: values}}/>
             </Tab.Navigator>
         </AppViewTemplate>
     )

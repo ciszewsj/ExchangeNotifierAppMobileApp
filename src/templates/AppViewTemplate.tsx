@@ -27,7 +27,7 @@ export const AppViewTemplate: FC<{ children: FC }> = ({children}) => {
             <View style={{flex: 1}}>{children}</View>
             <DataModal title={"Notifications"} onRequestClose={() => {
                 notificationController.closeModal()
-            }} visible={notificationController.isModalOpen}>
+            }} visible={notificationController.isModalOpen && navigation.isFocused()}>
                 <View style={{paddingBottom: 35, height: "100%"}}>
                     <ScrollView style={{flexGrow: 1}}>
                         <View style={{margin: 5}}>

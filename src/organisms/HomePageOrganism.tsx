@@ -12,7 +12,7 @@ export const HomePageOrganism: FC<{}> = () => {
 
     useEffect(() => {
         setSearchedSettings(notificationSettings.filter(id => `${id.currencySymbol}-${id.secondCurrencySymbol}`.toUpperCase().includes(searchText.toUpperCase())))
-    }, [searchText])
+    }, [searchText, notificationSettings])
 
     return (
         <View style={{gap: 10, margin: 15}}>

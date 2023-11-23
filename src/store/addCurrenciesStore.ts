@@ -84,7 +84,8 @@ export const useAddNotificationStore = create<AddNotificationController>((set) =
                                 ...state,
                                 isProcessing: false,
                                 currentSecondaryCurrency: null,
-                                currentMainCurrency: null
+                                currentMainCurrency: null,
+                                isDataCorrect: false
                             }))
                             return
                         }
@@ -110,7 +111,8 @@ export const useAddNotificationStore = create<AddNotificationController>((set) =
                         ...state,
                         isProcessing: false,
                         currentSecondaryCurrency: null,
-                        currentMainCurrency: null
+                        currentMainCurrency: null,
+                        isDataCorrect: false
                     }))
                 })
                 .catch((error) => {

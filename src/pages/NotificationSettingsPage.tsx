@@ -1,13 +1,30 @@
-import React, {FC} from "react";
-import {AppViewTemplate} from "../templates/AppViewTemplate";
+import React, {FC, useEffect} from "react";
 import {KeyboardAvoidingView, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
 import {Card} from "../topography/Card";
 import {NormalButton} from "../atoms/NormalButton";
-import {InputData} from "../atoms/InputData";
-import {Octicons} from "@expo/vector-icons";
+import {useAddNotificationStore} from "../store/notificationSettingsStore";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import {auth, firestore} from "../firebase/firebase";
 
-export const SettingsPage: FC<{}> = () => {
-    return (<AppViewTemplate>
+
+export const NotificationSettingsPage: FC<{}> = () => {
+
+    const setSettings = useAddNotificationStore().setSettings
+    const deleteNotificationSettings = useAddNotificationStore().deleteNotificationSettings
+    const deleteData = useAddNotificationStore().deleteData
+
+    const navigation = useNavigation()
+    const route = useRoute();
+
+    const {settings} = route.params;
+
+    useEffect(() => {
+        if (settings) {
+            setSettings(settings)
+        }
+    }, [settings])
+
+    return <View>
         <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={{padding: 15, flexGrow: 1}}>
@@ -21,11 +38,14 @@ export const SettingsPage: FC<{}> = () => {
                             </View>
                         </Card>
                     </View>
-                    <NormalButton text={"Sing out"}/>
+                    <NormalButton text={"Delete"} isActive={!deleteData.isProcessing}
+                                  isProcessing={deleteData.isProcessing} onPress={() => {
+                        deleteNotificationSettings(firestore, auth, navigation)
+                    }}/>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
-    </AppViewTemplate>)
+    </View>
 }
 const styles = StyleSheet.create({
     scrollViewContent: {
