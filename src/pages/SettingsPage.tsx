@@ -5,8 +5,15 @@ import {Card} from "../topography/Card";
 import {NormalButton} from "../atoms/NormalButton";
 import {InputData} from "../atoms/InputData";
 import {Octicons} from "@expo/vector-icons";
+import {useSettingsStore} from "../store/settingsStore";
+import {auth} from "../firebase/firebase";
+import {NormalSwitch} from "../atoms/NormalSwitch";
 
 export const SettingsPage: FC<{}> = () => {
+    const logout = useSettingsStore().logout
+    const setDarkMode = useSettingsStore().changeStyle
+    const style = useSettingsStore().style
+
     return (<AppViewTemplate>
         <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -17,11 +24,20 @@ export const SettingsPage: FC<{}> = () => {
                                 <View style={{flex: 1}}>
                                     <Text>All notifications</Text>
                                 </View>
-                                <Switch/>
+                                <NormalSwitch/>
+                            </View>
+                        </Card>
+                        <Card>
+                            <View style={{alignItems: "center", flexDirection: "row"}}>
+                                <View style={{flex: 1}}>
+                                    <Text>Dark mode</Text>
+                                </View>
+                                <NormalSwitch value={style === "dark"} onChange={setDarkMode}/>
                             </View>
                         </Card>
                     </View>
-                    <NormalButton text={"Sing out"}/>
+                    <NormalButton text={"Sing out"} isActive={true} isProcessing={false}
+                                  onPress={() => (logout(auth))}/>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -36,6 +52,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        marginHorizontal: 0
+        marginHorizontal: 0,
+        gap: 15
     },
 });

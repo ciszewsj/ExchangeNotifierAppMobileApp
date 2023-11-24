@@ -13,7 +13,8 @@ export const ApplicationRouter: FC<{}> = () => {
     return <Tab.Navigator>
         <Tab.Screen name="OutsideHome" component={MainHomeRouter} options={{
             tabBarIcon: ({color, size}) => <Fontisto name="money-symbol" size={size} color={color}/>,
-            headerShown: false
+            headerShown: false,
+            tabBarLabel: "Home"
         }}/>
         <Tab.Screen name="New" component={CreateNewPage} options={{
             tabBarIcon: ({color, size}) => <Ionicons name="ios-add-circle-outline" size={size} color={color}/>

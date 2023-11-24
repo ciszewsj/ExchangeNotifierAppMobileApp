@@ -24,7 +24,7 @@ export const DataModal: FC<{
                 backgroundColor: 'rgba(0, 0, 0, 0.5)'
             }}>
                 <View style={{
-                    backgroundColor: '#ffff',
+                    backgroundColor: '#F2F2F2',
                     padding: 20,
                     borderRadius: 20,
                     minHeight: 100,

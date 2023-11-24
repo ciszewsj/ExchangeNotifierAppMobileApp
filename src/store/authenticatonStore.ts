@@ -132,6 +132,12 @@ export const useStore = create<AuthenticationController>((set) => ({
         }))
         signInWithEmailAndPassword(auth, useStore.getState().loginData.email, useStore.getState().loginData.password)
             .then(() => {
+                set(state => ({
+                    ...state,
+                    loginData: {
+                        ...initialState.loginData,
+                    }
+                }))
             }).catch(reason => {
             set(state => ({
                 ...state,
