@@ -1,6 +1,6 @@
 import {create} from "zustand/esm";
 import {NotificationSettingEntity, NotificationTypeEntity} from "../firebase/UserSettings";
-import {ExchangeRate, ExchangeRateDocument, ExchangeRateEntity} from "../firebase/ExchangeRate";
+import {ExchangeRate, ExchangeRateEntity} from "../firebase/ExchangeRate";
 
 interface HomePageController {
     currencies: CurrencySettings[]
@@ -30,9 +30,9 @@ export const useHomePageStore = create<HomePageController>((set) => ({
                 if (entities.hasOwnProperty(key)) {
                     const entity = entities[key];
                     const foundIndex = oldCurrencies.findIndex(currency => currency.mainCurrency === entity.currencySymbol && currency.secondaryCurrency === entity.secondCurrencySymbol);
-                    if (foundIndex != -1) {
+                    if (oldCurrencies.hasOwnProperty(foundIndex)) {
                         newCurrencies[foundIndex] = {
-                            ...newCurrencies[foundIndex],
+                            ...oldCurrencies[foundIndex],
                             notification_settings: entity.notificationTypes,
                         }
                     } else {

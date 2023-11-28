@@ -1,6 +1,7 @@
 import {create} from "zustand/esm";
-import {NotificationSettingEntity, UserSettings} from "../firebase/UserSettings";
+import {NotificationSettingEntity, NotificationTypeEntity, UserSettings} from "../firebase/UserSettings";
 import {doc, getDoc, setDoc} from 'firebase/firestore';
+import {ExchangeRate} from "../firebase/ExchangeRate";
 
 export type CurrencyElement = {
     currency: string,
@@ -79,7 +80,12 @@ export const useAddNotificationStore = create<AddNotificationController>((set) =
                         let val = docData.notification_settings.find(value => value.currencySymbol === mainSymbol &&
                             value.secondCurrencySymbol === secondSymbol)
                         if (val) {
-                            navigate.navigate("EUR-USD", {...val})
+                            navigate.navigate("EUR-USD", {
+                                mainCurrency: val.currencySymbol,
+                                secondaryCurrency: val.secondCurrencySymbol,
+                                notification_settings: val.notificationTypes,
+                                current_values: []
+                            })
                             set(state => ({
                                 ...state,
                                 isProcessing: false,
