@@ -5,18 +5,20 @@ import {useHomePageStore} from "../store/homePageStore";
 import {CurrencyLabel} from "../molecules/CurrencyLabel";
 
 export const HomePageOrganism: FC<{}> = () => {
-    const notificationSettings = useHomePageStore().notification_settings
+    const notificationSettings = useHomePageStore().currencies
 
     const [searchedSettings, setSearchedSettings] = useState([])
     const [searchText, setSearchText] = useState("")
 
     useEffect(() => {
-        setSearchedSettings(notificationSettings.filter(id => `${id.currencySymbol}-${id.secondCurrencySymbol}`.toUpperCase().includes(searchText.toUpperCase())))
+        setSearchedSettings(notificationSettings.filter(id => `${id.mainCurrency}-${id.secondaryCurrency}`.toUpperCase().includes(searchText.toUpperCase())))
     }, [searchText, notificationSettings])
+
+    const toDisplay = searchedSettings.filter(id => id.mainCurrency != null && id.secondaryCurrency != null)
 
     return (
         <View style={{gap: 10, margin: 15}}>
-            <InputData placeholder={"Find"} value={searchText} onChange={setSearchText} isActive={true}/>
+            <InputData placeholder={"Find"} value={toDisplay} onChange={setSearchText} isActive={true}/>
             <FlatList keyExtractor={(id) => id.currencySymbol + "-" + id.secondCurrencySymbol}
                       data={searchedSettings}
                       renderItem={({item: currency}) => <CurrencyLabel currency={currency}/>}

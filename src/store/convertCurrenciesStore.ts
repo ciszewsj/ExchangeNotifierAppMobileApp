@@ -8,12 +8,13 @@ interface ConvertCurrenciesController {
     }
     convertFromMainCurrency: (currency: string) => void
     convertFromSecondaryCurrency: (currency: string) => void
+    setConverterValue: (value: number | null) => void
 }
 
 const initial_state = {
-    exchangeRate: 100,
+    exchangeRate: 0,
     mainCurrency: "1.00",
-    secondaryCurrency: " 100.00"
+    secondaryCurrency: "0.00"
 
 }
 
@@ -46,6 +47,19 @@ export const useConverterStore = create<ConvertCurrenciesController>((set) => ({
                 mainCurrency: (curr / state.data.exchangeRate).toFixed(2)
             }
         }))
+    },
+    setConverterValue: (value: number | null) => {
+        let curr: number = parseFloat(useConverterStore.getState().data.mainCurrency.replace(",", "."))
+        set(state => ({
+                ...state,
+                data: {
+                    ...state.data,
+                    exchangeRate: value ? value : 0,
+                    secondaryCurrency: (curr * value).toFixed(2)
+                }
+            })
+        )
+
     }
 }))
 

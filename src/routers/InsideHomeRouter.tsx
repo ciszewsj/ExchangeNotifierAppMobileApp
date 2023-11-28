@@ -3,21 +3,21 @@ import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs
 import {createStackNavigator} from '@react-navigation/stack';
 import {HomePage} from "../pages/HomePage";
 import {AppViewTemplate} from "../templates/AppViewTemplate";
-import {NotificationSettingEntity} from "../firebase/UserSettings";
 import {NotificationSettingsPage} from "../pages/NotificationSettingsPage";
 import {ConverterPage} from "../pages/ConverterPage";
 import {ExchangeRatePage} from "../pages/ExchangeRatePage";
+import {CurrencySettings} from "../store/homePageStore";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 export const InsideHomeRouter: FC<{ route, navigation }> = ({route, navigation}) => {
 
-    const values: NotificationSettingEntity = route.params as NotificationSettingEntity
+    const values: CurrencySettings = route.params as CurrencySettings
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: `${values.currencySymbol}-${values.secondCurrencySymbol}`,
+            title: `${values.mainCurrency}-${values.secondaryCurrency}`,
         });
     }, [navigation]);
     return (

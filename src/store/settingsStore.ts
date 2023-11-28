@@ -20,7 +20,7 @@ export const useSettingsStore = create<SettingsController>((set) => ({
     },
     logout: (auth: Auth) => {
         if (auth.currentUser != null) {
-            auth.signOut().catch(e => console.log(e))
+            auth.signOut().catch(() => {})
         }
     }
 

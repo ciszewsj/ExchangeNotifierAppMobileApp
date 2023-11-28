@@ -1,13 +1,33 @@
 import {StyleSheet, Text, View} from "react-native";
 import {Octicons} from "@expo/vector-icons";
-import React from "react";
+import React, {useEffect} from "react";
 import {InputData} from "../atoms/InputData";
 import {useConverterStore} from "../store/convertCurrenciesStore";
+import {CurrencySettings} from "../store/homePageStore";
+import {useRoute} from "@react-navigation/native";
+import {ExchangeRate} from "../firebase/ExchangeRate";
 
 export const ConverterPageOrganism = () => {
     const data = useConverterStore().data
+
+    const currentValue = (rates?: ExchangeRate[] | undefined) => {
+        if (rates == undefined || rates.length === 0) {
+            return 0
+        } else {
+            return rates.reduce((acc, val) => acc.date > val.date ? acc : val).rate
+
+        }
+    }
+
+    const values: CurrencySettings = useRoute().params.settings as CurrencySettings
+
     const convertFromMainCurrency = useConverterStore().convertFromMainCurrency
     const convertFromSecondaryCurrency = useConverterStore().convertFromSecondaryCurrency
+    const setConverterValue = useConverterStore().setConverterValue
+
+    useEffect(() => {
+        setConverterValue(currentValue(values.current_values))
+    }, [values])
     return (
         <View style={{padding: 15, flexGrow: 1}}>
             <View style={styles.content}/>
