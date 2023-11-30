@@ -16,11 +16,12 @@ export const HomePageOrganism: FC<{}> = () => {
 
     const toDisplay = searchedSettings.filter(id => id.mainCurrency != null && id.secondaryCurrency != null)
 
+
     return (
         <View style={{gap: 10, margin: 15}}>
-            <InputData placeholder={"Find"} value={toDisplay} onChange={setSearchText} isActive={true}/>
-            <FlatList keyExtractor={(id) => id.currencySymbol + "-" + id.secondCurrencySymbol}
-                      data={searchedSettings}
+            <InputData placeholder={"Find"} value={searchText} onChange={setSearchText} isActive={true}/>
+            <FlatList keyExtractor={(id, index) => String(index)}
+                      data={toDisplay}
                       renderItem={({item: currency}) => <CurrencyLabel currency={currency}/>}
                       scrollEnabled={false}/>
         </View>

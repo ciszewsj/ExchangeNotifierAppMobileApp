@@ -16,7 +16,6 @@ export const DataModal: FC<{
             transparent={true}
             visible={visible}
             onRequestClose={onRequestClose}>
-            {/*<Pressable style={{flexGrow: 1}} onPress={onRequestClose}>*/}
             <View style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -49,7 +48,6 @@ export const DataModal: FC<{
                     </View>
                 </View>
             </View>
-            {/*</Pressable>*/}
         </Modal>
     )
 }

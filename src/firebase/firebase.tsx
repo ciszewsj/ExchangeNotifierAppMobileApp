@@ -28,3 +28,5 @@ export {auth}
 
 const firestore = getFirestore(app)
 export {firestore}
+
+export const USER_SETTINGS = "USERS_SETTINGS"
