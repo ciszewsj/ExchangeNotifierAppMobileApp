@@ -1,5 +1,4 @@
 import {
-    AbstractNotificationSettings,
     NotificationSettingEntity,
     NotificationTypeEntity, PercentNotificationSettings, TimeNotificationSettings,
     UserSettings, ValueNotificationSettings
@@ -495,5 +494,5 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
                 }))
             })
         }
-    },
+    }
 }));

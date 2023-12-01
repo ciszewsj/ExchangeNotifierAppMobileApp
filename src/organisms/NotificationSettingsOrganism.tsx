@@ -14,6 +14,7 @@ export const NotificationSettingsOrganism = () => {
     const setSettings = useAddNotificationStore().setSettings
     const deleteNotificationSettings = useAddNotificationStore().deleteNotificationSettings
     const deleteData = useAddNotificationStore().deleteData
+    const changeStatusOfAllNotification = useAddNotificationStore().changeStatusOfAllNotification
 
     const navigation = useNavigation()
     const route = useRoute();
@@ -21,6 +22,8 @@ export const NotificationSettingsOrganism = () => {
     const {settings} = useMemo(() => route.params, []);
 
     const [isModalVisible, setModalVisible] = useState(false)
+
+    console.log(notificationSettings)
 
     const modal = useMemo(() => {
         return <NotificationSettingsRouter isModalVisible={isModalVisible} setModalVisible={setModalVisible}
@@ -48,7 +51,10 @@ export const NotificationSettingsOrganism = () => {
                             <View style={{flex: 1}}>
                                 <Text>Notifications...</Text>
                             </View>
-                            <Switch/>
+                            <Switch value={notificationSettings ? notificationSettings.enabled : false}
+                                    onChange={() => {
+                                        changeStatusOfAllNotification(auth, firestore)
+                                    }}/>
                         </View>
                     </Card>
                 </Pressable>

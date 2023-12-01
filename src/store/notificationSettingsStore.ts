@@ -1,6 +1,9 @@
 import {create} from "zustand/esm";
 import {NotificationSettingEntity, UserSettings} from "../firebase/UserSettings";
 import {doc, getDoc, setDoc} from "firebase/firestore";
+import {Auth} from "@firebase/auth";
+import {Firestore} from "@firebase/firestore";
+
 
 interface NotificationSettings {
     settings: NotificationSettingEntity | null,
@@ -8,7 +11,9 @@ interface NotificationSettings {
         isProcessing: boolean
     },
     setSettings: (settings: NotificationSettingEntity) => void
-    deleteNotificationSettings: (firestore: any, auth: any, navigation: any) => void
+    deleteNotificationSettings: (firestore: any, auth: any, navigation: any) => void,
+    changeStatusOfAllNotification: (auth: Auth, firestore: Firestore) => void
+
 }
 
 const init_state = {
@@ -79,6 +84,41 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                         }
                     }))
                 });
+        }
+    },
+    changeStatusOfAllNotification: (auth, firestore) => {
+        if (auth.currentUser
+            && useAddNotificationStore.getState().settings != null
+            && useAddNotificationStore.getState().settings!.currencySymbol != null
+            && useAddNotificationStore.getState().settings!.secondCurrencySymbol != null) {
+            let uid = auth.currentUser.uid
+            const docRef = doc(firestore, "USERS_SETTINGS", uid)
+            let mainSymbol = useAddNotificationStore.getState().settings!.currencySymbol
+            let secondSymbol = useAddNotificationStore.getState().settings!.secondCurrencySymbol
+            getDoc(docRef)
+                .then(async (snapshot) => {
+                    if (snapshot.exists()) {
+                        const docData = snapshot.data() as UserSettings;
+                        docData.notification_settings = docData.notification_settings.map(notif => {
+                            if (notif.currencySymbol === mainSymbol && notif.secondCurrencySymbol === secondSymbol) {
+                                notif.enabled = notif.enabled != undefined ? !notif.enabled : true
+                            }
+                            return notif
+                        })
+                        console.log(docData)
+                        await setDoc(docRef, {...docData})
+                        set(state => ({
+                            ...state,
+                            settings: {
+                                ...init_state.deleteData,
+                                isProcessing: false
+                            }
+                        }))
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
         }
     }
 }))

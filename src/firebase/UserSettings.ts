@@ -11,7 +11,8 @@ export type UserDeviceSettings = {
 export type NotificationSettingEntity = {
     currencySymbol: string,
     secondCurrencySymbol: string,
-    notificationTypes: NotificationTypeEntity[]
+    notificationTypes: NotificationTypeEntity[],
+    enabled?: boolean | undefined
 
 }
 
