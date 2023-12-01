@@ -7,8 +7,9 @@ export const DataModal: FC<{
     title: string,
     children?: any,
     onRequestClose: any,
-    visible: boolean
-}> = ({title, children, onRequestClose, visible}) => {
+    visible: boolean,
+    backButton?: any | undefined
+}> = ({title, children, onRequestClose, visible, backButton}) => {
 
     return (
         <Modal
@@ -33,7 +34,8 @@ export const DataModal: FC<{
                     maxWidth: 400
                 }}>
                     <View style={{flexDirection: "row", marginBottom: 5, alignItems: "center"}}>
-                        <View style={{flex: 1}}>
+                        <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                            {backButton}
                             <NormalText>{title}</NormalText>
                         </View>
                         <View>

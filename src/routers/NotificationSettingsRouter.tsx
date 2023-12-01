@@ -1,11 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
-import {View} from "react-native";
+import {Pressable, View} from "react-native";
 import {DataModal} from "../atoms/DataModal";
 import {NotificationSettingsAllPage} from "../pages/dropdown/NotificationSettingsAllPage";
 import {NotificationSettingsAddPage} from "../pages/dropdown/NotificationSettingsAddPage";
 import {useChangeNotificationStore} from "../store/changeNotificationSettings";
 import {NotificationSettingEntity} from "../firebase/UserSettings";
 import {Screens} from "./Screens";
+import {Ionicons} from '@expo/vector-icons';
 
 
 export const NotificationSettingsRouter: FC<{
@@ -46,7 +47,11 @@ export const NotificationSettingsRouter: FC<{
     return (
         <DataModal title={"Notifications"} onRequestClose={() => {
             setModalVisible(false)
-        }} visible={isModalVisible}>
+        }} visible={isModalVisible}
+                   backButton={screen !== Screens.MAIN ?
+                       <Pressable onPress={() => setScreen(Screens.MAIN)}>
+                           <Ionicons name="arrow-back" size={32} color="black"/>
+                       </Pressable> : undefined}>
             <View style={{height: "100%"}}>
                 <View style={{height: "90%"}}>
                     {renderScreen()}

@@ -52,7 +52,6 @@ export const NotificationSettingsAddPage: FC<{
                 </View>)
             case "PERCENT":
                 const percentAsText = () => {
-                    console.log(eventCreate.percent)
                     return eventCreate.percent % 1 === 0 ? eventCreate.percent?.toFixed(1) : eventCreate.percent.toString();
                 }
                 return (
@@ -173,7 +172,8 @@ export const NotificationSettingsAddPage: FC<{
                 </View>
             </View>
             <View style={{padding: 5}}>
-                <NormalButton text={"OK"} isActive={true} isProcessing={false} onPress={() => {
+                <NormalButton text={"OK"} isActive={eventCreate.isDataCorrect && !eventCreate.isProcessing}
+                              isProcessing={eventCreate.isProcessing} onPress={() => {
                     addNotification(auth, firestore, back)
                 }}/>
             </View>

@@ -15,7 +15,8 @@ export const NotificationSettingsAllPage: FC<{
     return (
         <View>
             <ScrollView style={{height: "100%"}}>
-                {settings != undefined && settings.map(setting => <NotificationSettingsLabel key={setting.uuid}
+                {settings != undefined && settings.map(setting => <NotificationSettingsLabel notification={setting}
+                                                                                             key={setting.uuid}
                                                                                              setScreen={setScreen}/>)}
                 <View style={{height: 65}}/>
             </ScrollView>

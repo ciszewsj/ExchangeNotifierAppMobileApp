@@ -1,7 +1,7 @@
 import {
     NotificationSettingEntity,
-    NotificationTypeEntity,
-    UserSettings
+    NotificationTypeEntity, PercentNotificationSettings, TimeNotificationSettings,
+    UserSettings, ValueNotificationSettings
 } from "../firebase/UserSettings";
 import {create} from "zustand/esm";
 import 'react-native-get-random-values';
@@ -32,7 +32,9 @@ export interface ChangeNotificationController {
         percent?: number,
         type?: "LOWER" | "HIGHER",
         notificationType?: "VALUE_TYPE" | "TIME_TYPE" | "PERCENT_TYPE",
-        period?: "HOUR" | "DAY" | "WEEK" | "MONTH"
+        period?: "HOUR" | "DAY" | "WEEK" | "MONTH",
+        isDataCorrect: boolean,
+        isProcessing: boolean,
     },
     setNotificationData: (data: NotificationSettingEntity | null) => void,
     changeCreateNotificationType: (type_name?: "TIME" | "PERCENT" | "VALUE",
@@ -60,7 +62,9 @@ const init_state = {
         value: 0.0,
         percent: 0.0,
         hour: 0,
-        minute: 0
+        minute: 0,
+        isDataCorrect: false,
+        isProcessing: false
     }
 };
 
@@ -73,15 +77,41 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
         }))
     },
     addNotification: (auth: Auth, firestore: Firestore, back: () => void) => {
+        set(state => ({
+            ...state,
+            eventCreate: {
+                ...state.eventCreate,
+                isProcessing: true
+            }
+        }))
+        const optionsToType = (): PercentNotificationSettings | TimeNotificationSettings | ValueNotificationSettings => {
+            switch (useChangeNotificationStore.getState().eventCreate.notificationType) {
+                case "PERCENT_TYPE":
+                    return {
+                        percent: useChangeNotificationStore.getState().eventCreate.percent,
+                        period: useChangeNotificationStore.getState().eventCreate.period,
+                        notificationType: useChangeNotificationStore.getState().eventCreate.notificationType
+                    }
+                case "TIME_TYPE":
+                    return {
+                        notificationType: useChangeNotificationStore.getState().eventCreate.notificationType,
+                        hour: useChangeNotificationStore.getState().eventCreate.hour,
+                        minute: useChangeNotificationStore.getState().eventCreate.minute
+                    }
+                case "VALUE_TYPE":
+                default:
+                    return {
+                        notificationType: useChangeNotificationStore.getState().eventCreate.notificationType,
+                        value: useChangeNotificationStore.getState().eventCreate.value,
+                        type: useChangeNotificationStore.getState().eventCreate.type
+                    }
+            }
+        }
         const notification: NotificationTypeEntity = {
             uuid: uuid(),
-            type_name: "VALUE",
-            enabled: false,
-            options: {
-                value: 4.2,
-                type: "LOWER",
-                notificationType: "VALUE_TYPE"
-            }
+            type_name: useChangeNotificationStore.getState().eventCreate.type_name,
+            enabled: true,
+            options: optionsToType()
         }
         if (auth.currentUser != null) {
             const document = doc(firestore, USER_SETTINGS, auth.currentUser.uid)
@@ -113,30 +143,70 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
                         await setDoc(document, {...data}).catch(e => console.log(e))
                         if (val != undefined) {
                             back()
-                            useAddNotificationStore().setSettings({
+                            useAddNotificationStore.getState().setSettings({
                                 currencySymbol: val.currencySymbol,
                                 secondCurrencySymbol: val.secondCurrencySymbol,
                                 notificationTypes: val.notificationTypes
                             })
                         }
                     }
+                    set(state => ({
+                        ...state,
+                        eventCreate: {
+                            ...state.eventCreate,
+                            isProcessing: false
+                        }
+                    }))
                 }
             ).catch(() => {
+                set(state => ({
+                    ...state,
+                    eventCreate: {
+                        ...state.eventCreate,
+                        isProcessing: false
+                    }
+                }))
             })
         }
     },
     changeCreateNotificationType: (type_name, hour, minute, value, percent, type, notificationType, period) => {
+        const isDataCorrect = () => {
+            switch (type_name) {
+                case "VALUE":
+                    return type != undefined && value >= 0
+                case "PERCENT":
+                    return period != undefined && percent != 0
+                case "TIME":
+                    return 0 <= hour <= 24 && 0 <= minute <= 60
+                default:
+                    return false
+            }
+        }
+        const notificationTypeFun = () => {
+            switch (type_name) {
+                case "TIME":
+                    return "TIME_TYPE"
+                case "VALUE":
+                    return "VALUE_TYPE"
+                case "PERCENT":
+                    return "PERCENT_TYPE"
+                default:
+                    return undefined
+            }
+        }
         set(state => ({
             ...state,
             eventCreate: {
+                ...state.eventCreate,
                 type_name: type_name,
                 hour: hour,
                 minute: minute,
                 value: value,
                 percent: percent,
                 type: type,
-                notificationType: notificationType,
-                period: period
+                notificationType: notificationTypeFun(),
+                period: period,
+                isDataCorrect: isDataCorrect()
             }
         }))
     }
