@@ -7,6 +7,7 @@ import {useChangeNotificationStore} from "../store/changeNotificationSettings";
 import {NotificationSettingEntity} from "../firebase/UserSettings";
 import {Screens} from "./Screens";
 import {Ionicons} from '@expo/vector-icons';
+import {NotificationSettingsEditPage} from "../pages/dropdown/NotificationSettingsEditPage";
 
 
 export const NotificationSettingsRouter: FC<{
@@ -37,15 +38,27 @@ export const NotificationSettingsRouter: FC<{
             case Screens.ADD:
                 return <NotificationSettingsAddPage back={() => setScreen(Screens.MAIN)}/>
             case Screens.EDIT:
-                return <NotificationSettingsAddPage back={() => setScreen(Screens.MAIN)}/>
+                return <NotificationSettingsEditPage back={() => setScreen(Screens.MAIN)}/>
             default:
                 return <View/>
         }
     }
 
+    const notificationSettingsName = () => {
+        switch (screen) {
+            case Screens.MAIN:
+                return "Notify rules"
+            case Screens.ADD:
+                return "Add rule"
+            case Screens.EDIT:
+                return "Edit rule"
+            default:
+                ""
+        }
+    }
 
     return (
-        <DataModal title={"Notifications"} onRequestClose={() => {
+        <DataModal title={notificationSettingsName()} onRequestClose={() => {
             setModalVisible(false)
         }} visible={isModalVisible}
                    backButton={screen !== Screens.MAIN ?

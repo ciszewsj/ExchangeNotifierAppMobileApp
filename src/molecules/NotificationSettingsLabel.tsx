@@ -9,6 +9,8 @@ import {
     TimeNotificationSettings,
     ValueNotificationSettings
 } from "../firebase/UserSettings";
+import {useChangeNotificationStore} from "../store/changeNotificationSettings";
+import {auth, firestore} from "../firebase/firebase";
 
 export const NotificationSettingsLabel: FC<{
     setScreen, notification: NotificationTypeEntity
@@ -16,6 +18,9 @@ export const NotificationSettingsLabel: FC<{
           setScreen,
           notification
       }) => {
+
+    const changeNotificationEnabledStatus = useChangeNotificationStore().changeNotificationEnabledStatus
+    const setNotificationChangeData = useChangeNotificationStore().setNotificationChangeData
 
     const name = () => {
 
@@ -53,7 +58,9 @@ export const NotificationSettingsLabel: FC<{
 
     return (
         <View style={{margin: 5}}>
-            <Pressable onPress={() => {
+            <Pressable onPress={async () => {
+                await setNotificationChangeData(notification)
+                console.log("???")
                 setScreen(Screens.EDIT)
             }}>
                 <Card>
@@ -63,6 +70,7 @@ export const NotificationSettingsLabel: FC<{
                             <Text numberOfLines={1}>{description()}</Text>
                         </View>
                         <NormalSwitch value={notification.enabled} onChange={() => {
+                            changeNotificationEnabledStatus(notification.uuid, auth, firestore)
                         }}/>
                     </View>
                 </Card>

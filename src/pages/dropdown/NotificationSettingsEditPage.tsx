@@ -1,25 +1,21 @@
-import {ScrollView, Text, View, StyleSheet} from "react-native";
 import React, {FC, useMemo} from "react";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
+import {useChangeNotificationStore} from "../../store/changeNotificationSettings";
+import {ValuePicker} from "../../molecules/ValuePicker";
 import {InputData} from "../../atoms/InputData";
 import {NormalButton} from "../../atoms/NormalButton";
-import {useChangeNotificationStore} from "../../store/changeNotificationSettings";
 import {auth, firestore} from "../../firebase/firebase";
-import {ValuePicker} from "../../molecules/ValuePicker";
 
-
-export const NotificationSettingsAddPage: FC<{
+export const NotificationSettingsEditPage: FC<{
     back: () => void
 }> = ({back}) => {
 
-    const addNotification = useChangeNotificationStore().addNotification
-    const changeCreateNotificationType = useChangeNotificationStore().changeCreateNotificationType
-    const eventCreate = useChangeNotificationStore().eventCreate
-    const resetCreateNotification = useChangeNotificationStore().resetCreateNotification
+    const editNotification = useChangeNotificationStore().editNotification
+    const changeCreateNotificationType = useChangeNotificationStore().changeEditNotificationType
+    const eventCreate = useChangeNotificationStore().eventEdit
+    const deleteNotifySettings = useChangeNotificationStore().deleteNotifySettings
 
-    useMemo(() => {
-        resetCreateNotification()
-    }, [])
-
+    console.log(eventCreate)
     const renderForm = () => {
         switch (eventCreate.type_name) {
             case "VALUE":
@@ -163,6 +159,7 @@ export const NotificationSettingsAddPage: FC<{
                         <ValuePicker options={["TIME", "PERCENT", "VALUE"]}
                                      selected={eventCreate.type_name != null ? eventCreate.type_name : null}
                                      onSelect={(e) => {
+                                         console.log(e)
                                          changeCreateNotificationType(e as "TIME" | "PERCENT" | "VALUE",
                                              eventCreate.hour,
                                              eventCreate.minute,
@@ -177,11 +174,18 @@ export const NotificationSettingsAddPage: FC<{
                 </View>
             </View>
             <View style={{padding: 5}}>
-                <NormalButton text={"OK"} isActive={eventCreate.isDataCorrect && !eventCreate.isProcessing}
+                <NormalButton text={"Delete"} isActive={!eventCreate.isProcessing}
                               isProcessing={eventCreate.isProcessing} onPress={() => {
-                    addNotification(auth, firestore, back)
+                    if (eventCreate != undefined && eventCreate.uuid != null) {
+                        deleteNotifySettings(eventCreate.uuid, auth, firestore, back)
+                    }
                 }}/>
-            </View>
+            </View><View style={{padding: 5}}>
+            <NormalButton text={"OK"} isActive={eventCreate.isDataCorrect && !eventCreate.isProcessing}
+                          isProcessing={eventCreate.isProcessing} onPress={() => {
+                editNotification(auth, firestore, back)
+            }}/>
+        </View>
         </ScrollView>
     );
 };
