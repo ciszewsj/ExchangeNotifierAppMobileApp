@@ -24,6 +24,25 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376893543666:android:6a15b213473d51de206c6b",
+        "android_client_info": {
+          "package_name": "ee.ciszewsj.exchangenotifierapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGLy2F8oNUMwG4bAhPN0URxFw4MUAbUHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"
