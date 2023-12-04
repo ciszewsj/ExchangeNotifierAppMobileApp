@@ -27,6 +27,7 @@ const init_state = {
 export const useAddNotificationStore = create<NotificationSettings>((set) => ({
     ...init_state,
     setSettings: (settings) => {
+        console.log("Setted is ", settings)
         set(state => ({
             ...state,
             settings: settings
@@ -48,7 +49,7 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                 .then(async (snapshot) => {
                     set(state => ({
                         ...state,
-                        settings: {
+                        deleteData: {
                             ...init_state.deleteData,
                             isProcessing: true
                         }
@@ -60,7 +61,7 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                         navigation.navigate("Home")
                         set(state => ({
                             ...state,
-                            settings: {
+                            deleteData: {
                                 ...init_state.deleteData,
                                 isProcessing: false
                             }
@@ -68,7 +69,7 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                     } else {
                         set(state => ({
                             ...state,
-                            settings: {
+                            deleteData: {
                                 ...init_state.deleteData,
                                 isProcessing: false
                             }
@@ -79,7 +80,7 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                     console.error('Błąd podczas przetwarzania dokumentu:', error);
                     set(state => ({
                         ...state,
-                        settings: {
+                        deleteData: {
                             ...init_state.deleteData,
                             isProcessing: false
                         }
@@ -119,10 +120,11 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                             }
                             return notif
                         })
+                        console.log("docData", docData)
                         await setDoc(docRef, {...docData})
                         set(state => ({
                             ...state,
-                            settings: {
+                            deleteData: {
                                 ...init_state.deleteData,
                                 isProcessing: false
                             }

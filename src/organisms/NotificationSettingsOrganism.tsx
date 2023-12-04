@@ -19,6 +19,9 @@ export const NotificationSettingsOrganism = () => {
     const navigation = useNavigation()
     const route = useRoute();
 
+    console.log("No1.", notificationSettings)
+
+
     const {settings} = useMemo(() => route.params, []);
 
     const [isModalVisible, setModalVisible] = useState(false)
@@ -34,7 +37,8 @@ export const NotificationSettingsOrganism = () => {
             setSettings({
                 currencySymbol: currencySettings.mainCurrency,
                 secondCurrencySymbol: currencySettings.secondaryCurrency,
-                notificationTypes: currencySettings.notification_settings
+                notificationTypes: currencySettings.notification_settings,
+                enabled: currencySettings.enabled ? currencySettings.enabled : false
             })
         }
     }, [settings])

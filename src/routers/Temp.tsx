@@ -25,6 +25,7 @@ export const Temp: FC<{}> = () => {
         return onSnapshot(documentRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.data() as UserSettings;
+                console.log("No2.", data.notification_settings)
                 updateUserNotifications(data.notification_settings)
                 updateSettings(data.notification_settings)
             } else {

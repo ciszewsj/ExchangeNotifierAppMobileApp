@@ -14,6 +14,7 @@ export type CurrencySettings = {
     secondaryCurrency: string
     notification_settings: NotificationTypeEntity[],
     current_values: ExchangeRate[],
+    enabled?: boolean | undefined
 }
 
 const initial_state = {
@@ -41,6 +42,7 @@ export const useHomePageStore = create<HomePageController>((set) => ({
                             secondaryCurrency: entity.secondCurrencySymbol,
                             notification_settings: entity.notificationTypes,
                             current_values: [],
+                            enabled: entity.enabled
                         })
                     }
                 }
