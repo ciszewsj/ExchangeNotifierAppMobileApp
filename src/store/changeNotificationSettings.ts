@@ -257,8 +257,11 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
 
                                 return s
                             })
+                        let wtf = data.notification_settings
+                            .findLast(value => value.currencySymbol === useChangeNotificationStore.getState().notificationData?.currencySymbol &&
+                                value.secondCurrencySymbol === useChangeNotificationStore.getState().notificationData?.secondCurrencySymbol
+                            )
                         await setDoc(document, {...data})
-                        data.notification_settings
                         set(state => ({
                             ...state,
                             notificationData: data.notification_settings
@@ -333,7 +336,6 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
                 .then(async (doc) => {
                     if (doc.exists()) {
                         const data = doc.data() as UserSettings
-                        console.log(data)
                         data.notification_settings =
                             data.notification_settings.map(s => {
                                 s.notificationTypes =
@@ -353,7 +355,6 @@ export const useChangeNotificationStore = create<ChangeNotificationController>((
                     }
                 })
                 .catch((e) => {
-                    console.log(e)
                 })
         }
     },

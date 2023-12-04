@@ -10,7 +10,8 @@ interface NotificationSettings {
     deleteData: {
         isProcessing: boolean
     },
-    setSettings: (settings: NotificationSettingEntity) => void
+    setSettings: (settings: NotificationSettingEntity) => void,
+    updateSettings: (settings: NotificationSettingEntity[]) => void,
     deleteNotificationSettings: (firestore: any, auth: any, navigation: any) => void,
     changeStatusOfAllNotification: (auth: Auth, firestore: Firestore) => void
 
@@ -86,6 +87,19 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                 });
         }
     },
+    updateSettings: (settings: NotificationSettingEntity[]) => {
+        const current = useAddNotificationStore.getState().settings
+        if (current != null) {
+            const found = settings.findIndex(value => value.currencySymbol === current.currencySymbol
+                && value.secondCurrencySymbol === current.secondCurrencySymbol)
+            if (settings.hasOwnProperty(found)) {
+                set(state => ({
+                    ...state,
+                    settings: settings[found]
+                }))
+            }
+        }
+    },
     changeStatusOfAllNotification: (auth, firestore) => {
         if (auth.currentUser
             && useAddNotificationStore.getState().settings != null
@@ -105,7 +119,6 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                             }
                             return notif
                         })
-                        console.log(docData)
                         await setDoc(docRef, {...docData})
                         set(state => ({
                             ...state,
@@ -117,7 +130,6 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                     }
                 })
                 .catch((e) => {
-                    console.log(e)
                 })
         }
     }

@@ -29,7 +29,6 @@ export const NotificationSettingsRouter: FC<{
         setScreen(Screens.MAIN)
     }, [isModalVisible])
 
-
     const renderScreen = () => {
         switch (screen) {
             case Screens.MAIN:

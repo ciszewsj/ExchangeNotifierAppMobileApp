@@ -3,16 +3,18 @@ import {auth, firestore} from "../firebase/firebase";
 import {ApplicationRouter} from "./ApplicationRouter";
 import {AuthenticationRouter} from "./AuthenticationRouter";
 import {doc, onSnapshot, setDoc} from "firebase/firestore";
-import {useAddNotificationStore} from "../store/addCurrenciesStore";
+import {useAddCurrenciesStore} from "../store/addCurrenciesStore";
 import {useHomePageStore} from "../store/homePageStore";
 import {UserSettings} from "../firebase/UserSettings";
+import {useAddNotificationStore} from "../store/notificationSettingsStore";
 
 export const Temp: FC<{}> = () => {
 
     const [isLogged, setIsLogged] = useState(false)
 
-    const updatePossibleOptions = useAddNotificationStore().updatePossibleOptions
+    const updatePossibleOptions = useAddCurrenciesStore().updatePossibleOptions
     const updateUserNotifications = useHomePageStore().updateUserNotifications
+    const updateSettings = useAddNotificationStore().updateSettings
 
     const settingsListener = useMemo(() => {
         if (!auth.currentUser) {
@@ -24,6 +26,7 @@ export const Temp: FC<{}> = () => {
             if (snapshot.exists()) {
                 const data = snapshot.data() as UserSettings;
                 updateUserNotifications(data.notification_settings)
+                updateSettings(data.notification_settings)
             } else {
             }
         });

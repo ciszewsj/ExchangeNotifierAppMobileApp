@@ -60,7 +60,6 @@ export const NotificationSettingsLabel: FC<{
         <View style={{margin: 5}}>
             <Pressable onPress={async () => {
                 await setNotificationChangeData(notification)
-                console.log("???")
                 setScreen(Screens.EDIT)
             }}>
                 <Card>

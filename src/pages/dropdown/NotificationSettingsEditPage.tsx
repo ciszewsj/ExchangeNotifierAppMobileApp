@@ -15,7 +15,6 @@ export const NotificationSettingsEditPage: FC<{
     const eventCreate = useChangeNotificationStore().eventEdit
     const deleteNotifySettings = useChangeNotificationStore().deleteNotifySettings
 
-    console.log(eventCreate)
     const renderForm = () => {
         switch (eventCreate.type_name) {
             case "VALUE":
@@ -159,7 +158,6 @@ export const NotificationSettingsEditPage: FC<{
                         <ValuePicker options={["TIME", "PERCENT", "VALUE"]}
                                      selected={eventCreate.type_name != null ? eventCreate.type_name : null}
                                      onSelect={(e) => {
-                                         console.log(e)
                                          changeCreateNotificationType(e as "TIME" | "PERCENT" | "VALUE",
                                              eventCreate.hour,
                                              eventCreate.minute,

@@ -23,12 +23,10 @@ export const NotificationSettingsOrganism = () => {
 
     const [isModalVisible, setModalVisible] = useState(false)
 
-    console.log(notificationSettings)
-
     const modal = useMemo(() => {
         return <NotificationSettingsRouter isModalVisible={isModalVisible} setModalVisible={setModalVisible}
                                            data={notificationSettings}/>
-    }, [isModalVisible, setModalVisible])
+    }, [isModalVisible, setModalVisible, notificationSettings])
 
     useEffect(() => {
         const currencySettings = settings as CurrencySettings

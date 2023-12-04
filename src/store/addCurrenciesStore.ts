@@ -1,7 +1,6 @@
 import {create} from "zustand/esm";
-import {NotificationSettingEntity, NotificationTypeEntity, UserSettings} from "../firebase/UserSettings";
+import {NotificationSettingEntity, UserSettings} from "../firebase/UserSettings";
 import {doc, getDoc, setDoc} from 'firebase/firestore';
-import {ExchangeRate} from "../firebase/ExchangeRate";
 
 export type CurrencyElement = {
     currency: string,
@@ -32,7 +31,7 @@ const init_state = {
     currentSecondaryCurrency: null,
 }
 
-export const useAddNotificationStore = create<AddNotificationController>((set) => ({
+export const useAddCurrenciesStore = create<AddNotificationController>((set) => ({
     ...init_state,
     changeMainCurrency: (currency: CurrencyElement) => {
         set(state => ({
@@ -62,9 +61,9 @@ export const useAddNotificationStore = create<AddNotificationController>((set) =
     createNewCurrencyConfig: (auth, firestore, navigate) => {
 
 
-        if (auth.currentUser && useAddNotificationStore.getState().currentMainCurrency != null && useAddNotificationStore.getState().currentSecondaryCurrency != null) {
-            let mainSymbol = useAddNotificationStore.getState().currentMainCurrency!.symbol
-            let secondSymbol = useAddNotificationStore.getState().currentSecondaryCurrency!.symbol
+        if (auth.currentUser && useAddCurrenciesStore.getState().currentMainCurrency != null && useAddCurrenciesStore.getState().currentSecondaryCurrency != null) {
+            let mainSymbol = useAddCurrenciesStore.getState().currentMainCurrency!.symbol
+            let secondSymbol = useAddCurrenciesStore.getState().currentSecondaryCurrency!.symbol
             let uid = auth.currentUser.uid
             const docRef = doc(firestore, "USERS_SETTINGS", uid)
             set(state => ({
