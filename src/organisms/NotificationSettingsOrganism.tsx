@@ -19,9 +19,6 @@ export const NotificationSettingsOrganism = () => {
     const navigation = useNavigation()
     const route = useRoute();
 
-    console.log("No1.", notificationSettings)
-
-
     const {settings} = useMemo(() => route.params, []);
 
     const [isModalVisible, setModalVisible] = useState(false)

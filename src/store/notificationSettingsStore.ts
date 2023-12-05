@@ -27,7 +27,6 @@ const init_state = {
 export const useAddNotificationStore = create<NotificationSettings>((set) => ({
     ...init_state,
     setSettings: (settings) => {
-        console.log("Setted is ", settings)
         set(state => ({
             ...state,
             settings: settings
@@ -120,7 +119,6 @@ export const useAddNotificationStore = create<NotificationSettings>((set) => ({
                             }
                             return notif
                         })
-                        console.log("docData", docData)
                         await setDoc(docRef, {...docData})
                         set(state => ({
                             ...state,

@@ -2,7 +2,7 @@ import {FC, useEffect, useMemo, useState} from "react";
 import {auth, firestore} from "../firebase/firebase";
 import {ApplicationRouter} from "./ApplicationRouter";
 import {AuthenticationRouter} from "./AuthenticationRouter";
-import {doc, onSnapshot, setDoc} from "firebase/firestore";
+import {doc, onSnapshot} from "firebase/firestore";
 import {useAddCurrenciesStore} from "../store/addCurrenciesStore";
 import {useHomePageStore} from "../store/homePageStore";
 import {UserSettings} from "../firebase/UserSettings";
@@ -25,7 +25,6 @@ export const Temp: FC<{}> = () => {
         return onSnapshot(documentRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.data() as UserSettings;
-                console.log("No2.", data.notification_settings)
                 updateUserNotifications(data.notification_settings)
                 updateSettings(data.notification_settings)
             } else {
