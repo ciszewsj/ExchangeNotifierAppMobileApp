@@ -12,19 +12,13 @@ import {Graph} from "../atoms/Graph";
 import {Card} from "../topography/Card";
 import {Ionicons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
+import {GraphOrganism} from "../organisms/GraphOrganism";
 
-export const ExchangeRatePage: FC<{}> = () => {
-    const navigation = useNavigation()
-
+export const ExchangeRateGraphPage: FC<{}> = () => {
     return (
         <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
-                <View onStartShouldSetResponder={() => true}
-                      style={{margin: 15, height: 400, maxWidth: 400, minWidth: 300}}>
-                    <Card>
-                        <Graph/>
-                    </Card>
-                </View>
+                <GraphOrganism/>
             </ScrollView>
         </KeyboardAvoidingView>)
 }

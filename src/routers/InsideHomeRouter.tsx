@@ -5,7 +5,7 @@ import {HomePage} from "../pages/HomePage";
 import {AppViewTemplate} from "../templates/AppViewTemplate";
 import {NotificationSettingsPage} from "../pages/NotificationSettingsPage";
 import {ConverterPage} from "../pages/ConverterPage";
-import {ExchangeRatePage} from "../pages/ExchangeRatePage";
+import {ExchangeRateGraphPage} from "../pages/ExchangeRateGraphPage";
 import {CurrencySettings} from "../store/homePageStore";
 
 const Tab = createMaterialTopTabNavigator();
@@ -14,7 +14,6 @@ const Stack = createStackNavigator();
 export const InsideHomeRouter: FC<{ route, navigation }> = ({route, navigation}) => {
 
     const values: CurrencySettings = route.params as CurrencySettings
-
     useLayoutEffect(() => {
         navigation.setOptions({
             title: `${values.mainCurrency}-${values.secondaryCurrency}`,
@@ -24,7 +23,8 @@ export const InsideHomeRouter: FC<{ route, navigation }> = ({route, navigation})
 
         <AppViewTemplate>
             <Tab.Navigator>
-                <Tab.Screen name="Rate" component={ExchangeRatePage} initialParams={{settings: values}}/>
+                <Tab.Screen name="Rate" component={ExchangeRateGraphPage} initialParams={{settings: values}}
+                            options={{swipeEnabled: false}}/>
                 <Tab.Screen name="Convert" component={ConverterPage} initialParams={{settings: values}}/>
                 <Tab.Screen name="Settings" component={NotificationSettingsPage} initialParams={{settings: values}}/>
             </Tab.Navigator>
