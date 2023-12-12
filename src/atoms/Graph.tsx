@@ -21,7 +21,8 @@ export const Graph: FC<{ data: itemType[] }> = ({data}) => {
         setMaxVal(data.map(value => value.value).reduce((max, currentValue) => Math.max(max, currentValue), -Infinity))
     }, [data])
 
-    const minPosition = minVal - 0.5 * (maxVal - minVal)
+    let minPosition = minVal - 0.5 * (maxVal - minVal)
+    minPosition = minPosition < 0 ? 0 : minPosition
     const maxPosition = maxVal - minPosition + 0.5 * (maxVal - minVal)
     return (
         <View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center"}}
@@ -30,10 +31,25 @@ export const Graph: FC<{ data: itemType[] }> = ({data}) => {
                 scrollToEnd={true}
                 width={state.x}
                 height={state.y}
-                initialSpacing={0}
+                initialSpacing={60}
+                endSpacing={60}
                 data={data}
                 maxValue={maxPosition}
                 yAxisOffset={minPosition}
+                showVerticalLines
+                xAxisIndicesWidth={50}
+                xAxisTextNumberOfLines={5}
+                xAxisLabelsVerticalShift={10}
+                spacing={90}
+                xAxisLabelTextStyle={{width: 100, marginLeft: -25}}
+                focusedDataPointColor={"black"}
+                textColor1="black"
+                dataPointsHeight={6}
+                dataPointsWidth={6}
+                textShiftY={-2}
+                textShiftX={-5}
+                textFontSize={13}
+
             />}
         </View>
     )
