@@ -2,7 +2,7 @@ import {create} from "zustand";
 import {ExchangeRateEntity} from "../firebase/ExchangeRate";
 import {itemType} from "react-native-gifted-charts/src/LineChart/types";
 
-type ConvertDataOptions = "MONTH" | "DAY" | "HOUR"
+export type ConvertDataOptions = "MONTH" | "DAY" | "HOUR"
 
 export interface GraphController {
     data: {

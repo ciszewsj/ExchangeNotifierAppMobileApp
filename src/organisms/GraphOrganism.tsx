@@ -1,19 +1,21 @@
 import {FC, useMemo} from "react";
-import {Text, View} from "react-native";
+import {View} from "react-native";
 import {Card} from "../topography/Card";
-import {useGraphStore} from "../store/graphStore";
+import {ConvertDataOptions, useGraphStore} from "../store/graphStore";
 import {useRoute} from "@react-navigation/native";
 import {Graph} from "../atoms/Graph";
 import {NormalText} from "../topography/NormalText";
+import {Selector} from "../atoms/Selector";
 
-export const GraphOrganism: FC<{}> = () => {
+export const GraphOrganism: FC = () => {
 
     const route = useRoute()
-
     const {settings} = useMemo(() => route.params, []);
 
     const data = useGraphStore().data.converted
+    const type = useGraphStore().data.type
     const setInput = useGraphStore().setInput
+    const convertData = useGraphStore().convertData
 
     useMemo(() => {
         setInput({
@@ -24,6 +26,8 @@ export const GraphOrganism: FC<{}> = () => {
             }
         })
     }, [settings])
+
+    const options: ConvertDataOptions[] = ["MONTH", "DAY", "HOUR"]
 
     return (
         <View onStartShouldSetResponder={() => true}
@@ -38,62 +42,8 @@ export const GraphOrganism: FC<{}> = () => {
                     gap: 10,
                     flexWrap: "wrap"
                 }}>
-                    <View style={{
-                        backgroundColor: "white", padding: 5,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        borderRadius: 20
-                    }}>
-                        <NormalText>YEAR</NormalText>
-                    </View>
-                    <View style={{
-                        backgroundColor: "white", padding: 5,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        borderRadius: 20
-                    }}>
-                        <NormalText>MONTH</NormalText>
-                    </View>
-                    <View style={{
-                        backgroundColor: "white", padding: 5,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        borderRadius: 20
-                    }}>
-                        <NormalText>WEEK</NormalText>
-                    </View>
-                    <View style={{
-                        backgroundColor: "white", padding: 5,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                        borderRadius: 20
-                    }}>
-                        <NormalText>DAY</NormalText>
-                    </View>
+                    {options.map(option => <Selector onPress={() => convertData(option)} isActive={type === option}
+                                                     text={option}/>)}
                 </View>
             </View>
         </View>
