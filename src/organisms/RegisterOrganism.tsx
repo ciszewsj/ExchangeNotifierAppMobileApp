@@ -4,6 +4,8 @@ import {InputData} from "../atoms/InputData";
 import {NormalButton} from "../atoms/NormalButton";
 import {AUTH_SUCCESS, useStore} from "../store/authenticatonStore";
 import {DataModal} from "../atoms/DataModal";
+import {NormalText} from "../topography/NormalText";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const RegisterOrganism: FC<{}> = () => {
     const data = useStore((state) => state.registerData);
@@ -20,7 +22,7 @@ export const RegisterOrganism: FC<{}> = () => {
             case "auth/success":
                 return (
                     <View>
-                        <Text>Your account created successfully!</Text>
+                        <NormalText>Your account created successfully!</NormalText>
                         <View style={{padding: 5}}>
                             <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                                 navigateBackToLoginFromRegister()
@@ -30,7 +32,7 @@ export const RegisterOrganism: FC<{}> = () => {
                 )
             case "auth/email-already-in-use":
                 return (<View>
-                    <Text>The provided email is already in used!</Text>
+                    <NormalText>The provided email is already in used!</NormalText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeRegisterUserModal()
@@ -39,7 +41,7 @@ export const RegisterOrganism: FC<{}> = () => {
                 </View>)
             case "auth/invalid-email":
                 return (<View>
-                    <Text>The provided email is invalid!</Text>
+                    <NormalText>The provided email is invalid!</NormalText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeRegisterUserModal()
@@ -48,7 +50,7 @@ export const RegisterOrganism: FC<{}> = () => {
                 </View>)
             case "auth/weak-password":
                 return (<View>
-                    <Text>The provided password is to weak!</Text>
+                    <NormalText>The provided password is to weak!</NormalText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeRegisterUserModal()
@@ -57,7 +59,7 @@ export const RegisterOrganism: FC<{}> = () => {
                 </View>)
             case "auth/missing-password":
                 return (<View>
-                    <Text>The password is required!</Text>
+                    <NormalText>The password is required!</NormalText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeRegisterUserModal()
@@ -66,7 +68,7 @@ export const RegisterOrganism: FC<{}> = () => {
                 </View>)
             default:
                 return (<View>
-                    <Text>Unknown error occurred try again later!</Text>
+                    <NormalText>Unknown error occurred try again later!</NormalText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeRegisterUserModal()
@@ -80,15 +82,15 @@ export const RegisterOrganism: FC<{}> = () => {
     let couldBeSend = data.password === data.repeatPassword
 
     return (<View style={{gap: 5}}>
-        <Text>Input email:</Text>
+        <SecondaryText>Input email:</SecondaryText>
         <InputData value={data.email} isActive={!data.isProcessing} onChange={changeRegisterEmail}
                    keyboardType={"email-address"} placeholder={"Email"}
                    description={data.emailAnnotation != null ? data.emailAnnotation : null}/>
-        <Text>Input password:</Text>
+        <SecondaryText>Input password:</SecondaryText>
         <InputData value={data.password} isActive={!data.isProcessing} onChange={changeRegisterPassword}
                    secureText={true} placeholder={"Password"}
                    description={data.passwordAnnotation != null ? data.passwordAnnotation : null}/>
-        <Text>Input password:</Text>
+        <SecondaryText>Input password:</SecondaryText>
         <InputData value={data.repeatPassword} isActive={!data.isProcessing} onChange={changeRepeatRegisterPassword}
                    secureText={true}
                    placeholder={"Repeat password"}

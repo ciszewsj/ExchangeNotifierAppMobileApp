@@ -1,8 +1,18 @@
 import {FC} from "react";
-import {Text} from "react-native";
+import {Text, StyleSheet} from "react-native";
+import {useSettingsStore} from "../store/settingsStore";
 
 export const NormalText: FC<{ children?: string }> = ({children}) => {
+    const style = useSettingsStore().data.style
 
-
-    return <Text style={{fontSize: 24,}}>{children}</Text>
+    return <Text style={[styles.normal, style === "dark" && styles.darkMode]}>{children}</Text>
 }
+
+const styles = StyleSheet.create({
+    normal: {
+        fontSize: 24,
+    },
+    darkMode: {
+        color: "#fff"
+    }
+})

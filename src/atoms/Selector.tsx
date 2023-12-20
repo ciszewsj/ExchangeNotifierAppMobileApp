@@ -1,16 +1,20 @@
 import {NormalText} from "../topography/NormalText";
 import {Pressable, StyleSheet, View} from "react-native";
 import {FC} from "react";
+import {useSettingsStore} from "../store/settingsStore";
 
 export const Selector: FC<{
     text?: string
     isActive?: boolean
     onPress?: any
 }> = ({text, isActive, onPress}) => {
+    const style = useSettingsStore().data.style
+
     return (
         <Pressable onPress={onPress ? onPress : () => {
         }}>
-            <View style={[styles.activeSelector, !isActive && styles.unActiveSelector]}>
+            <View
+                style={[styles.activeSelector, style === "dark" && styles.darkMode, !isActive && styles.unActiveSelector]}>
                 <NormalText>{text}</NormalText>
             </View>
         </Pressable>
@@ -33,6 +37,11 @@ const styles = StyleSheet.create({
     },
     unActiveSelector: {
         backgroundColor: "#FOFOFO"
+    },
+    darkMode: {
+        backgroundColor: "black",
+        shadowColor: "#fff",
+
     }
 });
 

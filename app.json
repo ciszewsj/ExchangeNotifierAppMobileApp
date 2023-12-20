@@ -1,4 +1,7 @@
 {
+  "name": "exchange-notifier-app",
+  "displayName": "ExchangeNotifierApp",
+  "orientation": "portrait",
   "expo": {
     "name": "exchange-notifier-app",
     "slug": "exchangeratenotifierapp",

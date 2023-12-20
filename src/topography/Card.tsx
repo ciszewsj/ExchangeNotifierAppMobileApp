@@ -1,10 +1,13 @@
 import {View, StyleSheet} from "react-native";
 import {FC} from "react";
+import {useSettingsStore} from "../store/settingsStore";
 
 export const Card: FC<{
     children: FC;
 }> = ({children}) => {
-    return <View style={styles.cardContainer}>
+    const style = useSettingsStore().data.style
+
+    return <View style={[styles.cardContainer, style === "dark" && styles.darkMode]}>
         {children}
     </View>
 }
@@ -23,4 +26,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
+    darkMode: {
+        backgroundColor: "#000",
+        shadowColor: "#fff",
+    }
 });

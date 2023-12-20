@@ -4,6 +4,7 @@ import {NormalButton} from "../atoms/NormalButton";
 import {InputData} from "../atoms/InputData";
 import {AUTH_SUCCESS, useStore} from "../store/authenticatonStore";
 import {DataModal} from "../atoms/DataModal";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const RestorePasswordOrganism: FC<{}> = () => {
     const data = useStore((state) => state.resetPasswordData);
@@ -18,7 +19,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
             case "auth/success":
                 return (
                     <View>
-                        <Text>Check your email and follow next steps to reset your password.</Text>
+                        <SecondaryText>Check your email and follow next steps to reset your password.</SecondaryText>
                         <View style={{padding: 5}}>
                             <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                                 navigateBackToLoginFromRestore()
@@ -29,7 +30,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
             case "auth/invalid-email":
                 return (
                     <View>
-                        <Text>The provided email is invalid!</Text>
+                        <SecondaryText>The provided email is invalid!</SecondaryText>
                         <View style={{padding: 5}}>
                             <NormalButton text={"Ok!"} isActive={true} isProcessing={false} onPress={() => {
                                 closeResetPasswordModal()
@@ -40,7 +41,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
             case "auth/missing-email":
                 return (
                     <View>
-                        <Text>Please provide valid email!</Text>
+                        <SecondaryText>Please provide valid email!</SecondaryText>
                         <View style={{padding: 5}}>
                             <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                                 closeResetPasswordModal()
@@ -51,7 +52,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
             case "auth/network-request-failed":
                 return (
                     <View>
-                        <Text>The network error occurred! Please try again later.</Text>
+                        <SecondaryText>The network error occurred! Please try again later.</SecondaryText>
                         <View style={{padding: 5}}>
                             <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                                 closeResetPasswordModal()
@@ -61,7 +62,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
                 )
             default:
                 return <View>
-                    <Text>Unknown error has appeared!</Text>
+                    <SecondaryText>Unknown error has appeared!</SecondaryText>
                     <View style={{padding: 5}}>
                         <NormalButton text="Ok!" isActive={true} isProcessing={false} onPress={() => {
                             closeResetPasswordModal()
@@ -73,7 +74,7 @@ export const RestorePasswordOrganism: FC<{}> = () => {
 
     return (
         <View style={{gap: 5}}>
-            <Text>Input email:</Text>
+            <SecondaryText>Input email:</SecondaryText>
             <InputData value={data.email}
                        placeholder={"email"}
                        keyboardType={"email-address"}

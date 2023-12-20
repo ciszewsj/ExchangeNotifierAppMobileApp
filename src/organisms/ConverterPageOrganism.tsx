@@ -6,9 +6,12 @@ import {useConverterStore} from "../store/convertCurrenciesStore";
 import {CurrencySettings} from "../store/homePageStore";
 import {useRoute} from "@react-navigation/native";
 import {ExchangeRate} from "../firebase/ExchangeRate";
+import {useSettingsStore} from "../store/settingsStore";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const ConverterPageOrganism = () => {
     const data = useConverterStore().data
+    const style = useSettingsStore().data.style
 
     const currentValue = (rates?: ExchangeRate[] | undefined) => {
         if (rates == undefined || rates.length === 0) {
@@ -32,16 +35,16 @@ export const ConverterPageOrganism = () => {
         <View style={{padding: 15, flexGrow: 1}}>
             <View style={styles.content}/>
             <View style={{justifyContent: "center", flexGrow: 1}}>
-                <Text>Main currency:</Text>
+                <SecondaryText>Main currency:</SecondaryText>
                 <InputData onChange={convertFromMainCurrency} isActive={true} value={data.mainCurrency}
                            keyboardType={"number-pad"} placeholder={"1.00"}/>
             </View>
             <View style={{justifyContent: "center", alignItems: "center", flexGrow: 1}}>
-                <Octicons name="arrow-switch" size={54} color="black"/>
-                <Text>x {data.exchangeRate}</Text>
+                <Octicons name="arrow-switch" size={54} color={style === "dark" ? "white" : "black"}/>
+                <SecondaryText>x {data.exchangeRate.toString()}</SecondaryText>
             </View>
             <View style={{justifyContent: "center", flexGrow: 1}}>
-                <Text>Secondary currency:</Text>
+                <SecondaryText>Secondary currency:</SecondaryText>
                 <InputData onChange={convertFromSecondaryCurrency} isActive={true} value={data.secondaryCurrency}
                            keyboardType={"number-pad"}
                            placeholder={"1.00"}/>

@@ -2,6 +2,7 @@ import {FC} from "react";
 import {Modal, View, Pressable} from "react-native";
 import {NormalText} from "../topography/NormalText";
 import {AntDesign} from '@expo/vector-icons';
+import {useSettingsStore} from "../store/settingsStore";
 
 export const DataModal: FC<{
     title: string,
@@ -10,6 +11,7 @@ export const DataModal: FC<{
     visible: boolean,
     backButton?: any | undefined
 }> = ({title, children, onRequestClose, visible, backButton}) => {
+    const style = useSettingsStore().data.style
 
     return (
         <Modal
@@ -23,7 +25,7 @@ export const DataModal: FC<{
                 alignItems: 'center',
                 backgroundColor: 'rgba(0, 0, 0, 0.5)'
             }}>
-                <View style={{
+                <View style={[{
                     backgroundColor: '#F2F2F2',
                     padding: 20,
                     borderRadius: 20,
@@ -32,7 +34,10 @@ export const DataModal: FC<{
                     width: "80%",
                     minWidth: 200,
                     maxWidth: 400
-                }}>
+                }, style === "dark" && {
+                    backgroundColor: '#0f0f0f',
+
+                }]}>
                     <View style={{flexDirection: "row", marginBottom: 5, alignItems: "center"}}>
                         <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
                             {backButton}
@@ -40,7 +45,7 @@ export const DataModal: FC<{
                         </View>
                         <View>
                             <Pressable onPress={onRequestClose}>
-                                <AntDesign name="closecircleo" size={24} color="black"/>
+                                <AntDesign name="closecircleo" size={24} color={style === "dark" ? "white" : "black"}/>
                             </Pressable>
                         </View>
                     </View>

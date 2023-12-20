@@ -17,6 +17,8 @@ export const GraphOrganism: FC = () => {
     const setInput = useGraphStore().setInput
     const convertData = useGraphStore().convertData
 
+    console.log(type)
+
     useMemo(() => {
         setInput({
             mainCurrency: settings.mainCurrency,
@@ -42,8 +44,10 @@ export const GraphOrganism: FC = () => {
                     gap: 10,
                     flexWrap: "wrap"
                 }}>
-                    {options.map(option => <Selector onPress={() => convertData(option)} isActive={type === option}
-                                                     text={option}/>)}
+                    {options.map(option => {
+                        return <Selector onPress={() => convertData(option)} isActive={type === option}
+                                         text={option}/>
+                    })}
                 </View>
             </View>
         </View>

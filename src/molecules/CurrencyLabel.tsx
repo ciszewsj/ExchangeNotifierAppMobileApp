@@ -7,6 +7,7 @@ import {ExchangeRate, ExchangeRateDocument} from "../firebase/ExchangeRate";
 import {auth, firestore} from "../firebase/firebase";
 import {doc, onSnapshot} from "firebase/firestore";
 import {PercentChangeMolecule} from "./PercentChange";
+import {NormalText} from "../topography/NormalText";
 
 export const CurrencyLabel: FC<{ currency: CurrencySettings }> = ({currency}) => {
     const nav = useNavigation();
@@ -74,11 +75,10 @@ export const CurrencyLabel: FC<{ currency: CurrencySettings }> = ({currency}) =>
                 <Card>
                     <View style={{flexDirection: "row", gap: 5}}>
                         <View style={{flex: 1, justifyContent: "center"}}>
-                            <Text
-                                style={{fontSize: 24}}>{currency.mainCurrency}-{currency.secondaryCurrency}</Text>
+                            <NormalText>{currency.mainCurrency}-{currency.secondaryCurrency}</NormalText>
                         </View>
                         <View style={{justifyContent: "center"}}>
-                            <Text style={{fontSize: 24}}>{value != null ? value.rate : "-"}</Text>
+                            <NormalText>{value != null ? value.rate : "-"}</NormalText>
                         </View>
                         <PercentChangeMolecule
                             averageYesterday={averageYesterday != null ? averageYesterday : undefined}

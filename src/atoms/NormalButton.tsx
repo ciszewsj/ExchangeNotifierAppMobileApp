@@ -1,6 +1,8 @@
 import React, {FC} from "react";
 import {ActivityIndicator, Pressable, StyleSheet, Text, View} from "react-native";
 import {GestureResponderEvent} from "react-native/Libraries/Types/CoreEventTypes";
+import {ButtonText} from "../topography/ButtonText";
+import {useSettingsStore} from "../store/settingsStore";
 
 export const NormalButton: FC<{
     text: string;
@@ -8,15 +10,19 @@ export const NormalButton: FC<{
     isActive?: boolean;
     isProcessing?: boolean;
 }> = ({onPress, text, isActive, isProcessing}) => {
+    const style = useSettingsStore().data.style
 
     return (
-        <Pressable style={[styles.textInput, !isActive && {backgroundColor: "#D9D9D9"}]} onPress={onPress}
-                   disabled={!isActive}>
+        <Pressable
+            style={[styles.textInput, style === "dark" && styles.darkMode, !isActive && {backgroundColor: "#D9D9D9"},
+                !isActive && style === "dark" && {backgroundColor: "#424242"}]}
+            onPress={onPress}
+            disabled={!isActive}>
             <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
                 <View style={{alignItems: "center", justifyContent: "center"}}>
-                    <Text style={{textAlign: "center", color: "black"}}>{text}</Text>
+                    <ButtonText>{text}</ButtonText>
                 </View>
-                {isProcessing &&
+                    {isProcessing &&
                     <View style={{marginLeft: 5}}>
                         <ActivityIndicator color={"black"}/>
                     </View>}
@@ -39,4 +45,8 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
+    darkMode: {
+        backgroundColor: "#000",
+        shadowColor: "#fff",
+    }
 });

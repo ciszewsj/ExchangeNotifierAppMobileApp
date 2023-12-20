@@ -7,6 +7,8 @@ import {useAddNotificationStore} from "../store/notificationSettingsStore";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {NotificationSettingsRouter} from "../routers/NotificationSettingsRouter";
 import {CurrencySettings} from "../store/homePageStore";
+import {NormalText} from "../topography/NormalText";
+import {NormalSwitch} from "../atoms/NormalSwitch";
 
 export const NotificationSettingsOrganism = () => {
 
@@ -48,12 +50,13 @@ export const NotificationSettingsOrganism = () => {
                     <Card>
                         <View style={{alignItems: "center", flexDirection: "row"}}>
                             <View style={{flex: 1}}>
-                                <Text>Notifications...</Text>
+                                <NormalText>Notifications...</NormalText>
                             </View>
-                            <Switch value={notificationSettings ? notificationSettings.enabled : false}
-                                    onChange={() => {
-                                        changeStatusOfAllNotification(auth, firestore)
-                                    }}/>
+                            <NormalSwitch
+                                value={notificationSettings ? notificationSettings.enabled != undefined ? notificationSettings.enabled : false : false}
+                                onChange={() => {
+                                    changeStatusOfAllNotification(auth, firestore)
+                                }}/>
                         </View>
                     </Card>
                 </Pressable>

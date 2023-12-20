@@ -145,6 +145,7 @@ export const useGraphStore = create<GraphController>((set) => ({
             type: type,
             data: {
                 ...state.data,
+                type: type,
                 converted: items == undefined ? init_data.data.input : items
             }
         }))

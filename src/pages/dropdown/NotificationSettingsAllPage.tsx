@@ -4,6 +4,7 @@ import React, {FC} from "react";
 import {NotificationSettingsLabel} from "../../molecules/NotificationSettingsLabel";
 import {NotificationTypeEntity} from "../../firebase/UserSettings";
 import {Screens} from "../../routers/Screens";
+import {SecondaryText} from "../../topography/SecondaryText";
 
 export const NotificationSettingsAllPage: FC<{
     setScreen, settings: NotificationTypeEntity[]
@@ -30,7 +31,7 @@ export const NotificationSettingsAllPage: FC<{
                     <Card>
                         <View
                             style={{width: 25, height: 25, justifyContent: "center", alignItems: "center"}}>
-                            <Text>+</Text>
+                            <SecondaryText>+</SecondaryText>
                         </View>
                     </Card>
                 </Pressable>

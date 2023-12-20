@@ -11,6 +11,7 @@ import {
 } from "../firebase/UserSettings";
 import {useChangeNotificationStore} from "../store/changeNotificationSettings";
 import {auth, firestore} from "../firebase/firebase";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const NotificationSettingsLabel: FC<{
     setScreen, notification: NotificationTypeEntity
@@ -65,8 +66,8 @@ export const NotificationSettingsLabel: FC<{
                 <Card>
                     <View style={{flexDirection: "row", alignItems: "center"}}>
                         <View style={{flex: 1}}>
-                            <Text numberOfLines={1}>{name()}</Text>
-                            <Text numberOfLines={1}>{description()}</Text>
+                            <SecondaryText numberOfLines={1}>{name()}</SecondaryText>
+                            <SecondaryText numberOfLines={1}>{description()}</SecondaryText>
                         </View>
                         <NormalSwitch value={notification.enabled} onChange={() => {
                             changeNotificationEnabledStatus(notification.uuid, auth, firestore)

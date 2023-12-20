@@ -6,8 +6,12 @@ import {CurrencyPicker} from "../molecules/CurrencyPicker";
 import {useAddCurrenciesStore} from "../store/addCurrenciesStore";
 import {auth, firestore} from "../firebase/firebase";
 import {useNavigation} from "@react-navigation/native";
+import {useSettingsStore} from "../store/settingsStore";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const CreateNewOrganism = () => {
+    const style = useSettingsStore().data.style
+
     const mainCurrencies = useAddCurrenciesStore().possibleMainCurrencies
     const secondaryCurrencies = useAddCurrenciesStore().possibleSecondaryCurrencies
     const changeMainCurrency = useAddCurrenciesStore().changeMainCurrency
@@ -24,15 +28,15 @@ export const CreateNewOrganism = () => {
         <View style={{padding: 15, flexGrow: 1}}>
             <View style={styles.content}/>
             <View style={{justifyContent: "center", flexGrow: 1}}>
-                <Text>Main currency:</Text>
+                <SecondaryText>Main currency:</SecondaryText>
                 <CurrencyPicker options={mainCurrencies} onSelect={changeMainCurrency} selected={currentMainCurrency}
                                 isActive={!isProcessing}/>
             </View>
             <View style={{justifyContent: "center", alignItems: "center", flexGrow: 1}}>
-                <Octicons name="arrow-switch" size={54} color="black"/>
+                <Octicons name="arrow-switch" size={54} color={style === "dark" ? "white" : "black"}/>
             </View>
             <View style={{justifyContent: "center", flexGrow: 1}}>
-                <Text>Secondary currency:</Text>
+                <SecondaryText>Secondary currency:</SecondaryText>
                 <CurrencyPicker options={secondaryCurrencies} onSelect={changeSecondaryCurrency}
                                 selected={currentSecondaryCurrency} isActive={!isProcessing}/>
             </View>

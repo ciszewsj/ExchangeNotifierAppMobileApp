@@ -21,6 +21,8 @@ if (firebase.getApps().length === 0) {
     app = firebase.getApp();
 }
 
+export {app}
+
 const auth = getAuth(app)
 
 export {auth}

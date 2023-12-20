@@ -2,8 +2,10 @@ import {FC, useEffect, useState} from "react";
 import {View} from "react-native";
 import {LineChart} from "react-native-gifted-charts";
 import {itemType} from "react-native-gifted-charts/src/LineChart/types";
+import {useSettingsStore} from "../store/settingsStore";
 
 export const Graph: FC<{ data: itemType[] }> = ({data}) => {
+    const isDark = useSettingsStore().data.style === "dark"
 
     let [state, setState] = useState({x: 100, y: 100})
     const [minVal, setMinVal] = useState(0)
@@ -41,14 +43,18 @@ export const Graph: FC<{ data: itemType[] }> = ({data}) => {
                 xAxisTextNumberOfLines={5}
                 xAxisLabelsVerticalShift={10}
                 spacing={90}
-                xAxisLabelTextStyle={{width: 100, marginLeft: -25}}
-                focusedDataPointColor={"black"}
-                textColor1="black"
+                xAxisLabelTextStyle={{width: 100, marginLeft: -25, color: isDark ? "white" : "black"}}
+                focusedDataPointColor={isDark ? "white" : "black"}
+                textColor1={isDark ? "white" : "black"}
+                color={isDark ? "white" : "black"}
                 dataPointsHeight={6}
                 dataPointsWidth={6}
                 textShiftY={-2}
                 textShiftX={-5}
                 textFontSize={13}
+                yAxisColor={isDark ? "white" : "black"}
+                xAxisColor={isDark ? "white" : "black"}
+                yAxisTextStyle={{color: isDark ? "white" : "black"}}
 
             />}
         </View>
