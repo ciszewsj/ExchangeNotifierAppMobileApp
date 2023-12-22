@@ -36,7 +36,9 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     unActiveSelector: {
-        backgroundColor: "#FOFOFO"
+        // backgroundColor: "#FOFOFO"
+        backgroundColor: "rgba(169,169,169,0.94)",
+        color: "#FOFOFO"
     },
     darkMode: {
         backgroundColor: "black",

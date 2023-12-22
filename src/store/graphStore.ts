@@ -33,20 +33,16 @@ export const useGraphStore = create<GraphController>((set) => ({
                 input: input
             }
         }))
-        console.log(input)
         if (input != null) {
             useGraphStore.getState().convertData(undefined)
         }
     },
     convertData: type => {
-        console.log(type)
         if (type == undefined) {
             type = useGraphStore.getState().data.type
-            console.log("???", type)
         }
         let items: itemType[] | undefined = undefined
         const rates = useGraphStore.getState().data.input?.document.exchangeRates
-
 
         if (rates != undefined && rates?.length > 0
         ) {
@@ -61,8 +57,25 @@ export const useGraphStore = create<GraphController>((set) => ({
                 }
             )
 
-            converted_rates = converted_rates.sort((a, b) => a.date - b.date)
+            function getTime(): number {
+                switch (type) {
+                    case "MONTH":
+                        return 365 * 24 * 60 * 60 * 1000;
+                    case "DAY":
+                        return 31 * 24 * 60 * 60 * 1000;
+                    case "HOUR":
+                        return 24 * 60 * 60 * 1000;
+                    default:
+                        return 0;
+                }
+            }
+
+
+            converted_rates = converted_rates.filter(s => {
+                return s.date.getTime() >= new Date().getTime() - getTime()
+            }).sort((a, b) => a.date - b.date)
             let options: Intl.DateTimeFormatOptions
+
             switch (type) {
                 case "HOUR":
                     options = {
@@ -86,28 +99,30 @@ export const useGraphStore = create<GraphController>((set) => ({
                         year: 'numeric'
                     };
             }
+
             let all_x_values = []
-            let act = converted_rates.map(value => value.date).reduce((minDate, currentDate) => {
+            let act = converted_rates.length > 0 ? converted_rates.map(value => value.date).reduce((minDate, currentDate) => {
                 return currentDate < minDate ? currentDate : minDate;
-            });
-            let max = converted_rates.map(value => value.date).reduce((minDate, currentDate) => {
+            }) : null;
+            let max = converted_rates.length > 0 ? converted_rates.map(value => value.date).reduce((minDate, currentDate) => {
                 return currentDate > minDate ? currentDate : minDate;
-            });
+            }) : null;
 
-            do {
-                all_x_values.push(act.toLocaleDateString('en-US', options))
-                switch (type) {
-                    case "HOUR":
-                        act.setHours(act.getHours() + 1)
-                        break
-                    case "DAY":
-                        act.setDate(act.getDate() + 1)
-                        break
-                    default:
-                        act.setMonth(act.getMonth() + 1)
-                }
-            } while (act < max)
-
+            if (act != null) {
+                do {
+                    all_x_values.push(act.toLocaleDateString('en-US', options))
+                    switch (type) {
+                        case "HOUR":
+                            act.setHours(act.getHours() + 1)
+                            break
+                        case "DAY":
+                            act.setDate(act.getDate() + 1)
+                            break
+                        default:
+                            act.setMonth(act.getMonth() + 1)
+                    }
+                } while (act < max)
+            }
             const new_converted_rates = converted_rates.map(rate => {
                 return {
                     rate: rate.rate,
@@ -128,6 +143,11 @@ export const useGraphStore = create<GraphController>((set) => ({
                     avg = el.reduce((a, b) => a + b, 0) / el.length || 0
 
                 }
+                try {
+                    avg = avg.toFixed(4)
+                } catch (e) {
+                    console.log("ERROR", e)
+                }
                 items.push(
                     {
                         value: avg,
@@ -138,7 +158,7 @@ export const useGraphStore = create<GraphController>((set) => ({
                 last_val = avg
             }
         }
-        console.log(items)
+
         set(state => ({
             ...state,
 
@@ -146,7 +166,7 @@ export const useGraphStore = create<GraphController>((set) => ({
             data: {
                 ...state.data,
                 type: type,
-                converted: items == undefined ? init_data.data.input : items
+                converted: items == undefined || items.length < 1 ? init_data.data.input : items
             }
         }))
     }

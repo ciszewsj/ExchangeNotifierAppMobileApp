@@ -4,7 +4,7 @@ import {LineChart} from "react-native-gifted-charts";
 import {itemType} from "react-native-gifted-charts/src/LineChart/types";
 import {useSettingsStore} from "../store/settingsStore";
 
-export const Graph: FC<{ data: itemType[] }> = ({data}) => {
+export const Graph: FC<{ data: itemType[] | undefined }> = ({data}) => {
     const isDark = useSettingsStore().data.style === "dark"
 
     let [state, setState] = useState({x: 100, y: 100})
@@ -19,17 +19,20 @@ export const Graph: FC<{ data: itemType[] }> = ({data}) => {
     }
 
     useEffect(() => {
-        setMinVal(data.map(value => value.value).reduce((max, currentValue) => Math.min(max, currentValue), Infinity))
-        setMaxVal(data.map(value => value.value).reduce((max, currentValue) => Math.max(max, currentValue), -Infinity))
+        if (data != undefined) {
+            setMinVal(data.map(value => value.value).reduce((max, currentValue) => Math.min(max, currentValue), Infinity))
+            setMaxVal(data.map(value => value.value).reduce((max, currentValue) => Math.max(max, currentValue), -Infinity))
+        }
     }, [data])
 
     let minPosition = minVal - 0.5 * (maxVal - minVal)
     minPosition = minPosition < 0 ? 0 : minPosition
     const maxPosition = maxVal - minPosition + 0.5 * (maxVal - minVal)
+
     return (
         <View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center"}}
               onLayout={onLayout}>
-            {isVisible && <LineChart
+            {data != undefined && isVisible && <LineChart
                 scrollToEnd={true}
                 width={state.x}
                 height={state.y}

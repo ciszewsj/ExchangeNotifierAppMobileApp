@@ -1,17 +1,9 @@
-import {FC, useEffect, useLayoutEffect, useState} from "react";
+import {FC} from "react";
 import {
     KeyboardAvoidingView,
-    PanResponder,
-    Pressable,
     ScrollView,
-    StyleSheet,
-    TouchableWithoutFeedback,
-    View
+    StyleSheet
 } from "react-native";
-import {Graph} from "../atoms/Graph";
-import {Card} from "../topography/Card";
-import {Ionicons} from "@expo/vector-icons";
-import {useNavigation} from "@react-navigation/native";
 import {GraphOrganism} from "../organisms/GraphOrganism";
 
 export const ExchangeRateGraphPage: FC<{}> = () => {
