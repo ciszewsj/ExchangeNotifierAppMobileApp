@@ -1,9 +1,11 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {Platform} from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import {useEffect, useState} from "react";
-import {Subscription} from "expo-notifications";
+import {Subscription} from 'expo-notifications';
+import {useSettingsStore} from "../store/settingsStore";
+import {auth, firestore} from "../firebase/firebase";
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -20,24 +22,38 @@ export function NotificationService() {
     const [notificationListener, setNotificationListener] = useState<Subscription>(null);
     const [responseListener, setResponseListener] = useState<Subscription>(null);
 
+    const setToken = useSettingsStore().setToken
+
     useEffect(() => {
-        registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+        try {
+            registerForPushNotificationsAsync().then(token => {
+                setExpoPushToken(token)
+                console.log("SETTING TOKEN.... ", auth, " ", firestore)
+                if (auth != null && firestore != null) {
+                    setToken(token, auth, firestore)
+                }
+            });
 
-        setNotificationListener(Notifications.addNotificationReceivedListener(
-            notification => {
-                console.log(notification)
-                setNotification(notification);
+            setNotificationListener(Notifications.addNotificationReceivedListener(
+                notification => {
+                    console.log(notification)
+                    setNotification(notification);
+                }))
+
+            setResponseListener(Notifications.addNotificationResponseReceivedListener(response => {
+                console.log(response);
             }))
-
-        setResponseListener(Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
-        }))
+        } catch (e) {
+            console.log(e)
+        }
 
         return () => {
             Notifications.removeNotificationSubscription(notificationListener);
             Notifications.removeNotificationSubscription(responseListener);
         };
-    }, []);
+    }, [auth.currentUser]);
+
+    return <></>
 }
 
 async function registerForPushNotificationsAsync() {
@@ -65,7 +81,6 @@ async function registerForPushNotificationsAsync() {
         }
 
         token = (await Notifications.getExpoPushTokenAsync({projectId: '7b7b7e03-9459-4a44-bdc8-a709d90c3b03'})).data;
-        console.log(token);
     } else {
         alert('Must use physical device for Push Notifications');
     }

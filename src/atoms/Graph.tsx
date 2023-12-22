@@ -32,34 +32,34 @@ export const Graph: FC<{ data: itemType[] | undefined }> = ({data}) => {
     return (
         <View style={{width: "100%", height: "100%", justifyContent: "center", alignItems: "center"}}
               onLayout={onLayout}>
-            {data != undefined && isVisible && <LineChart
-                scrollToEnd={true}
-                width={state.x}
-                height={state.y}
-                initialSpacing={60}
-                endSpacing={60}
-                data={data}
-                maxValue={maxPosition}
-                yAxisOffset={minPosition}
-                showVerticalLines
-                xAxisIndicesWidth={50}
-                xAxisTextNumberOfLines={5}
-                xAxisLabelsVerticalShift={10}
-                spacing={90}
-                xAxisLabelTextStyle={{width: 100, marginLeft: -25, color: isDark ? "white" : "black"}}
-                focusedDataPointColor={isDark ? "white" : "black"}
-                textColor1={isDark ? "white" : "black"}
-                color={isDark ? "white" : "black"}
-                dataPointsHeight={6}
-                dataPointsWidth={6}
-                textShiftY={-2}
-                textShiftX={-5}
-                textFontSize={13}
-                yAxisColor={isDark ? "white" : "black"}
-                xAxisColor={isDark ? "white" : "black"}
-                yAxisTextStyle={{color: isDark ? "white" : "black"}}
+            {/*{data != undefined && data.length > 0 && isVisible && <LineChart*/}
+            {/*    scrollToEnd={true}*/}
+            {/*    width={state.x}*/}
+            {/*    height={state.y}*/}
+            {/*    initialSpacing={60}*/}
+            {/*    endSpacing={60}*/}
+            {/*    data={data}*/}
+            {/*    maxValue={maxPosition}*/}
+            {/*    yAxisOffset={minPosition}*/}
+            {/*    showVerticalLines*/}
+            {/*    xAxisIndicesWidth={50}*/}
+            {/*    xAxisTextNumberOfLines={5}*/}
+            {/*    xAxisLabelsVerticalShift={10}*/}
+            {/*    spacing={90}*/}
+            {/*    xAxisLabelTextStyle={{width: 100, marginLeft: -25, color: isDark ? "white" : "black"}}*/}
+            {/*    focusedDataPointColor={isDark ? "white" : "black"}*/}
+            {/*    textColor1={isDark ? "white" : "black"}*/}
+            {/*    color={isDark ? "white" : "black"}*/}
+            {/*    dataPointsHeight={6}*/}
+            {/*    dataPointsWidth={6}*/}
+            {/*    textShiftY={-2}*/}
+            {/*    textShiftX={-5}*/}
+            {/*    textFontSize={13}*/}
+            {/*    yAxisColor={isDark ? "white" : "black"}*/}
+            {/*    xAxisColor={isDark ? "white" : "black"}*/}
+            {/*    yAxisTextStyle={{color: isDark ? "white" : "black"}}*/}
 
-            />}
+            {/*/>}*/}
         </View>
     )
 }

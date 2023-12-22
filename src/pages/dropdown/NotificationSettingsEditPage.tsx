@@ -5,6 +5,7 @@ import {ValuePicker} from "../../molecules/ValuePicker";
 import {InputData} from "../../atoms/InputData";
 import {NormalButton} from "../../atoms/NormalButton";
 import {auth, firestore} from "../../firebase/firebase";
+import {SecondaryText} from "../../topography/SecondaryText";
 
 export const NotificationSettingsEditPage: FC<{
     back: () => void
@@ -22,7 +23,7 @@ export const NotificationSettingsEditPage: FC<{
                     return eventCreate.value % 1 === 0 ? eventCreate.value?.toFixed(1) : eventCreate.value.toString();
                 }
                 return (<View>
-                    <Text>When value...</Text>
+                    <SecondaryText>When value...</SecondaryText>
                     <ValuePicker options={["LOWER", "HIGHER"]} selected={eventCreate.type ? eventCreate.type : null}
                                  onSelect={(element) => {
                                      changeCreateNotificationType(
@@ -36,7 +37,7 @@ export const NotificationSettingsEditPage: FC<{
                                          eventCreate.period
                                      );
                                  }} isActive={true}/>
-                    <Text>Value</Text>
+                    <SecondaryText>Value</SecondaryText>
                     <InputData keyboardType={"number-pad"} isActive={true} value={valueAsText()} onChange={e => {
                         const newFloat = parseFloat(e)
                         changeCreateNotificationType(
@@ -56,7 +57,7 @@ export const NotificationSettingsEditPage: FC<{
                 }
                 return (
                     <View>
-                        <Text>Percent change... </Text>
+                        <SecondaryText>Percent change... </SecondaryText>
                         <InputData keyboardType={"numeric"} isActive={true} value={percentAsText()}
                                    onChange={
                                        (element) => {
@@ -76,7 +77,7 @@ export const NotificationSettingsEditPage: FC<{
                                        }
                                    }
                         />
-                        <Text>During period...</Text>
+                        <SecondaryText>During period...</SecondaryText>
                         <ValuePicker isActive={true} options={["HOUR", "DAY", "WEEK", "MONTH"]}
                                      selected={eventCreate.period ? eventCreate.period : null}
                                      onSelect={(element) => {
@@ -100,7 +101,7 @@ export const NotificationSettingsEditPage: FC<{
                     return time.toFixed(0)
                 }
                 return (<View>
-                    <Text>Notify at hour...</Text>
+                    <SecondaryText>Notify at hour...</SecondaryText>
                     <InputData keyboardType={"numeric"} isActive={true}
                                value={eventCreate.hour ? numberToTime(eventCreate.hour) : ""}
                                onChange={(element) => {
@@ -121,7 +122,7 @@ export const NotificationSettingsEditPage: FC<{
                                        eventCreate.period
                                    )
                                }}/>
-                    <Text>Notify at minute...</Text>
+                    <SecondaryText>Notify at minute...</SecondaryText>
                     <InputData keyboardType={"numeric"} isActive={true}
                                value={eventCreate.minute ? numberToTime(eventCreate.minute) : ""}
                                onChange={(element) => {
@@ -154,7 +155,7 @@ export const NotificationSettingsEditPage: FC<{
                 <View>
                     <View style={{padding: 5}}>
 
-                        <Text>Notify when...</Text>
+                        <SecondaryText>Notify when...</SecondaryText>
                         <ValuePicker options={["TIME", "PERCENT", "VALUE"]}
                                      selected={eventCreate.type_name != null ? eventCreate.type_name : null}
                                      onSelect={(e) => {

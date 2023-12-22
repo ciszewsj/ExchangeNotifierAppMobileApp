@@ -20,7 +20,7 @@ export const SettingsOrganism: FC<{}> = () => {
                         <View style={{flex: 1}}>
                             <NormalText>All notifications</NormalText>
                         </View>
-                        <NormalSwitch/>
+                        <NormalSwitch value={true}/>
                     </View>
                 </Card>
                 <Card>

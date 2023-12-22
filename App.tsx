@@ -36,7 +36,7 @@ export default function App() {
     return (
         <NavigationContainer theme={style === "dark" ? dark : light}>
             <Temp/>
-            {/*<NotificationService/>*/}
+            <NotificationService/>
         </NavigationContainer>
     );
 }

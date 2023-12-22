@@ -1,20 +1,23 @@
 import React, {FC} from "react";
-import {KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
+import {KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, View} from "react-native";
 import {Circle} from "../topography/Circle";
 import {Fontisto} from '@expo/vector-icons';
 import {useSettingsStore} from "../store/settingsStore";
 
 export const MainMenuTemplate: FC<{ children: any }> = ({children}) => {
     const style = useSettingsStore().data.style
+    const changeStyle = useSettingsStore().changeStyle
 
     return (
         <KeyboardAvoidingView style={{width: "100%", height: "100%", justifyContent: "flex-end"}}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.content}>
                     <View style={{flex: 1, minHeight: 250}}>
-                        <Circle>
-                            <Fontisto name="money-symbol" size={128} color={style === "dark" ? "white" : "black"}/>
-                        </Circle>
+                        <Pressable onPress={changeStyle}>
+                            <Circle>
+                                <Fontisto name="money-symbol" size={128} color={style === "dark" ? "white" : "black"}/>
+                            </Circle>
+                        </Pressable>
                     </View>
                 </View>
                 <View style={{margin: 25}}>

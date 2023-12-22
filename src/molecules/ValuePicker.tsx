@@ -3,6 +3,8 @@ import {AntDesign} from '@expo/vector-icons';
 import {DataModal} from "../atoms/DataModal";
 import {FC, useState} from "react";
 import {Card} from "../topography/Card";
+import {useSettingsStore} from "../store/settingsStore";
+import {SecondaryText} from "../topography/SecondaryText";
 
 export const ValuePicker: FC<{
     options?: string[],
@@ -12,6 +14,7 @@ export const ValuePicker: FC<{
 }> = ({options, selected, onSelect, isActive}) => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const style = useSettingsStore().data.style
 
     return (
         <View>
@@ -30,13 +33,17 @@ export const ValuePicker: FC<{
                     elevation: 3,
                     flexDirection: "row",
                     alignItems: "center"
-                }, !isActive && {backgroundColor: "#D9D9D9"}]}>
+                }, style === "dark" && {
+                    backgroundColor: "black"
+                }, !isActive && {backgroundColor: "#D9D9D9"}
+
+                ]}>
                     <View style={{flexDirection: "row"}}>
                         <View style={{flex: 1}}>
-                            {selected == null ? <Text>Choose value...</Text> :
-                                <Text>{selected}</Text>}
+                            {selected == null ? <SecondaryText>Choose value...</SecondaryText> :
+                                <SecondaryText>{selected}</SecondaryText>}
                         </View>
-                        <AntDesign name="caretdown" size={20} color="black"/>
+                        <AntDesign name="caretdown" size={20} color={style == "dark" ? "white" : "black"}/>
                     </View>
                 </View>
             </Pressable>
@@ -51,7 +58,8 @@ export const ValuePicker: FC<{
                                     setModalVisible(false)
                                 }}>
                                     <Card>
-                                        <Text>{currency}</Text>
+
+                                        <SecondaryText>{currency}</SecondaryText>
                                     </Card>
                                 </Pressable>
                             </View>
